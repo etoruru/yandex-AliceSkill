@@ -4,19 +4,25 @@ import json
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def get():
-    return '<h2>Hello world</h2>'
+# for testing
+# @app.route('/', methods=['GET'])
+# def get():
+#     return '<h2>Hello world</h2>'
 
-@app.route('/json', methods=['POST'])
-def index():
+@app.route('/', methods=['POST'])
+def main():
     request_data = request.get_json()
 
-    version = request_data['version']
-    session = request_data['session']
-    content = request_data['request']['command']
-    response = {'text': "Hello! I'll repeat anything you say to me."}
+    response = create_response(request_data)
 
-    response_dict = {'version': version, 'session': session, 'response': response}
-    json_obj = json.dumps(response_dict, indent=4)
-    return json_obj
+    return json.dumps(response, indent=4)
+
+def create_response(request):
+    version = request['version']
+    session = request['session']
+    content = request['request']['command']
+    if not content:
+        content = "Hello! I'll repeat anything you say to me."
+    response = {'text': content, 'end_session': 'false'}
+    return {'version': version, 'session': session, 'response': response}
+

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 import json
 import user_actions
 
@@ -7,10 +7,18 @@ app = Flask(__name__)
 
 # for testing
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def get():
-    #return '<h1>Hello</h1>'
-    return render_template('index.html')
+    if request.method == "POST":
+        quest= request.form["nm"]
+        return redirect(url_for("answer", question=quest))
+    else:
+        return render_template("index.html")
+
+@app.route('/<question>')
+def answer(question):
+    return f'<h3>{make_answer(question)}</h3>'
+    #return f'<h3>{make_answer(question)}</h3>'
 
 
 # @app.route('/', methods=['POST'])
@@ -37,3 +45,5 @@ def create_response(request):
 def make_answer(content):
     return user_actions.make_answer(content)
 
+if __name__ == '__main__':
+    print(make_answer("'как зовут декана'"))

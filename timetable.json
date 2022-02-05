@@ -1,0 +1,196 @@
+{
+    "odd": {
+        "Monday": [
+            {
+                "name": "Логистика",
+                "time": "13:25",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "БП",
+                "time": "15:10",
+                "group": "-",
+                "online": "n"
+            }
+        ],
+        "Tuesday": {
+            "name": "",
+            "time": "",
+            "group": "",
+            "online": ""
+        },
+        "Wensday": {
+            "name": "",
+            "time": "",
+            "group": "",
+            "online": ""
+        },
+        "Thursday": [
+            {
+                "name": "Философия",
+                "time": "08:00",
+                "group": "-",
+                "online": "n"
+            }
+        ],
+        "Friday": [
+            {
+                "name": "АБД",
+                "time": "15:10",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "ИС УПК",
+                "time": "16:55",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "ИС УПК",
+                "time": "18:40",
+                "group": "1",
+                "online": "n"
+            }
+        ],
+        "Saturday": {
+            "name": "",
+            "time": "",
+            "group": "",
+            "online": ""
+        }
+    },
+    "even": {
+        "Monday": [
+            {
+                "name": "БП",
+                "time": "13:25",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "РИКТ и ОП",
+                "time": "15:10",
+                "group": "-",
+                "online": "n"
+            }
+        ],
+        "Tuesday": {
+            "name": "",
+            "time": "",
+            "group": "",
+            "online": ""
+        },
+        "Wensday": [
+            {
+                "name": "Философия",
+                "time": "16:55",
+                "group": "-",
+                "online": "y"
+            }
+        ],
+        "Thursday": {
+            "name": "",
+            "time": "",
+            "group": "",
+            "online": ""
+        },
+        "Friday": [
+            {
+                "name": "ИС УПК",
+                "time": "15:10",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "РИКТ и ОП",
+                "time": "16:55",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "ИС УПК",
+                "time": "18:40",
+                "group": "2",
+                "online": "n"
+            }
+        ],
+        "Saturday": {
+            "name": "",
+            "time": "",
+            "group": "",
+            "online": ""
+        }
+    },
+    "permanent": {
+        "Monday": [
+            {
+                "name": "Логистика",
+                "time": "11:30",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "ИТУ",
+                "time": "16:55",
+                "group": "-",
+                "online": "n"
+            }
+        ],
+        "Tuesday": {
+            "name": "",
+            "time": "",
+            "group": "",
+            "online": ""
+        },
+        "Wensday": [
+            {
+                "name": "Управление ИТ-сервисами и контентом",
+                "time": "8:00",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "Управление ИТ-сервисами и контентом",
+                "time": "09:45",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "О и УФР",
+                "time": "11:30",
+                "group": "-",
+                "online": "n"
+            }
+        ],
+        "Thursday": [
+            {
+                "name": "Социология",
+                "time": "8:00",
+                "group": "-",
+                "online": "n"
+            }
+        ],
+        "Friday": [
+            {
+                "name": "ФМ и ИА",
+                "time": "9:45",
+                "group": "-",
+                "online": "n"
+            },
+            {
+                "name": "АБД",
+                "time": "13:25",
+                "group": "-",
+                "online": "n"
+            }
+        ],
+        "Saturday": {
+            "name": "",
+            "time": "",
+            "group": "",
+            "online": ""
+        }
+    }
+}

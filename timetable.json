@@ -1,0 +1,149 @@
+{
+    "odd": {
+        "Monday": [
+            {
+                "name": "Логистика",
+                "time": "13:25",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "БП",
+                "time": "15:10",
+                "group": null,
+                "online": false
+            }
+        ],
+        "Thursday": [
+            {
+                "name": "Философия",
+                "time": "08:00",
+                "group": null,
+                "online": false
+            }
+        ],
+        "Friday": [
+            {
+                "name": "АБД",
+                "time": "15:10",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "ИС УПК",
+                "time": "16:55",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "ИС УПК",
+                "time": "18:40",
+                "group": 1,
+                "online": false
+            }
+        ]
+    },
+    "even": {
+        "Monday": [
+            {
+                "name": "БП",
+                "time": "13:25",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "РИКТ и ОП",
+                "time": "15:10",
+                "group": null,
+                "online": false
+            }
+        ],
+        "Wensday": [
+            {
+                "name": "Философия",
+                "time": "16:55",
+                "group": null,
+                "online": true
+            }
+        ],
+        "Friday": [
+            {
+                "name": "ИС УПК",
+                "time": "15:10",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "РИКТ и ОП",
+                "time": "16:55",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "ИС УПК",
+                "time": "18:40",
+                "group": 2,
+                "online": false
+            }
+        ]
+    },
+    "permanent": {
+        "Monday": [
+            {
+                "name": "Логистика",
+                "time": "11:30",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "ИТУ",
+                "time": "16:55",
+                "group": null,
+                "online": false
+            }
+        ],
+        "Wensday": [
+            {
+                "name": "Управление ИТ-сервисами и контентом",
+                "time": "8:00",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "Управление ИТ-сервисами и контентом",
+                "time": "09:45",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "О и УФР",
+                "time": "11:30",
+                "group": null,
+                "online": false
+            }
+        ],
+        "Thursday": [
+            {
+                "name": "Социология",
+                "time": "8:00",
+                "group": null,
+                "online": false
+            }
+        ],
+        "Friday": [
+            {
+                "name": "ФМ и ИА",
+                "time": "9:45",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "АБД",
+                "time": "13:25",
+                "group": null,
+                "online": false
+            }
+        ]
+    }
+}
+

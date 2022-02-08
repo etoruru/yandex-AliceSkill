@@ -1,6 +1,6 @@
 {
-    "odd": {
-        "Monday": [
+    "Monday": {
+        "odd": [
             {
                 "name": "Логистика",
                 "time": "13:25",
@@ -14,37 +14,7 @@
                 "online": false
             }
         ],
-        "Thursday": [
-            {
-                "name": "Философия",
-                "time": "08:00",
-                "group": null,
-                "online": false
-            }
-        ],
-        "Friday": [
-            {
-                "name": "АБД",
-                "time": "15:10",
-                "group": null,
-                "online": false
-            },
-            {
-                "name": "ИС УПК",
-                "time": "16:55",
-                "group": null,
-                "online": false
-            },
-            {
-                "name": "ИС УПК",
-                "time": "18:40",
-                "group": 1,
-                "online": false
-            }
-        ]
-    },
-    "even": {
-        "Monday": [
+        "even": [
             {
                 "name": "БП",
                 "time": "13:25",
@@ -58,37 +28,7 @@
                 "online": false
             }
         ],
-        "Wensday": [
-            {
-                "name": "Философия",
-                "time": "16:55",
-                "group": null,
-                "online": true
-            }
-        ],
-        "Friday": [
-            {
-                "name": "ИС УПК",
-                "time": "15:10",
-                "group": null,
-                "online": false
-            },
-            {
-                "name": "РИКТ и ОП",
-                "time": "16:55",
-                "group": null,
-                "online": false
-            },
-            {
-                "name": "ИС УПК",
-                "time": "18:40",
-                "group": 2,
-                "online": false
-            }
-        ]
-    },
-    "permanent": {
-        "Monday": [
+        "persistent": [
             {
                 "name": "Логистика",
                 "time": "11:30",
@@ -101,8 +41,19 @@
                 "group": null,
                 "online": false
             }
+        ]
+    },
+    "Wensday": {
+        "odd": [],
+        "even": [
+            {
+                "name": "Философия",
+                "time": "16:55",
+                "group": null,
+                "online": true
+            }
         ],
-        "Wensday": [
+        "persistent": [
             {
                 "name": "Управление ИТ-сервисами и контентом",
                 "time": "8:00",
@@ -121,16 +72,69 @@
                 "group": null,
                 "online": false
             }
+        ]
+    },
+    "Thursday": {
+        "odd": [
+            {
+                "name": "Философия",
+                "time": "08:00",
+                "group": null,
+                "online": false
+            }
         ],
-        "Thursday": [
+        "even": [],
+        "persistent": [
             {
                 "name": "Социология",
                 "time": "8:00",
                 "group": null,
                 "online": false
             }
+        ]
+    },
+    "Friday": {
+        "odd": [
+            {
+                "name": "АБД",
+                "time": "15:10",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "ИС УПК",
+                "time": "16:55",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "ИС УПК",
+                "time": "18:40",
+                "group": 1,
+                "online": false
+            }
         ],
-        "Friday": [
+        "even": [
+            {
+                "name": "ИС УПК",
+                "time": "15:10",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "РИКТ и ОП",
+                "time": "16:55",
+                "group": null,
+                "online": false
+            },
+            {
+                "name": "ИС УПК",
+                "time": "18:40",
+                "group": 2,
+                "online": false
+            }
+        ],
+        "persistent": [
             {
                 "name": "ФМ и ИА",
                 "time": "9:45",
@@ -146,4 +150,3 @@
         ]
     }
 }
-

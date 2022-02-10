@@ -69,15 +69,23 @@ def save(data):
     period = get_period(data['period'])
     subject_keys = ['name', 'time', 'group', 'online']
     subject = dict(zip(subject_keys, [name, time, group, online]))
+    if timetable.get(day, None):
+        timetable[day][period].append(subject)
+    else:
+        timetable[day] = {}
+        timetable[day][period] = subject
+    print(timetable[day])
 
-    timetable[day][period].append(subject)
-
+def write_in_file(timetable):
+    with open('new_timetable.json', 'w') as f:
+        json.dump(timetable, f, indent= 4, ensure_ascii=False)
 
 
 
 if __name__ == '__main__':
-    read()
-
+    #read()
+    data = {'day': 'Среда', 'name': 'Теория игр', 'group': None, 'time': '11:30', 'period': 'постоянно', 'online': False}
+    save(data)
 
 
 

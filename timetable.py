@@ -6,11 +6,13 @@ DATA_FILE = "timetable.json"
 
 
 def read():
-    return json.load(DATA_FILE)
+    with open(DATA_FILE, 'r') as f:
+        return json.load(f)
 
 
 def save(timetable):
-    json.dump(timetable, DATA_FILE, indent=4, ensure_ascii=False)
+    with open(DATA_FILE, 'w') as f:
+        json.dump(timetable, f, indent=4, ensure_ascii=False)
 
 
 def get_day_type(date):
@@ -22,23 +24,23 @@ def get_day_type(date):
         return 'odd'
 
 
-def get_timetable_for_day(date):
-    """ reads timetable for a certain day, return list of dicts, sorted by time; day-str, date-datetime """
+def get_lessons_for_day(date):
+    """ reads timetable for a certain day, return list of dicts, sorted by time; date-datetime """
     day = date.strftime("%A")
     timetable = read()
 
-    if timetable.get(day, None):
+    if timetable.get(day):
         week_type = get_day_type(date)
         current_timetable = []
-        persistent_tt = timetable[day].get('persistent', None)
-        period_tt = timetable[day].get(week_type, None)
+        persistent_tt = timetable[day].get('persistent')
+        period_tt = timetable[day].get(week_type)
         if persistent_tt:
             current_timetable.extend(persistent_tt)
 
         if period_tt:
             current_timetable.extend(period_tt)
 
-        return current_timetable
+        return current_timetable or None
     else:
         return None
 

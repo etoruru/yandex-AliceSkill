@@ -1,16 +1,18 @@
-import pytest
 import timetable
-from datetime import datetime, date
+from datetime import date
 
 
-days_off = ['Tuesday']
+def test_not_get_lessons():
+    assert timetable.get_lessons_for_day(date(2022, 2, 22)) is None
 
 
 def test_get_lessons():
-    d = date(2022, 2, 24)
-    if d.strftime("%A") in days_off:
-        assert timetable.get_lessons_for_day(d) is None
-    else:
-        assert timetable.get_lessons_for_day(d) is not None
+    assert timetable.get_lessons_for_day(date(2022, 2, 25)) == [{'name': 'ФМ и ИА', 'time': '9:45', 'group': None, 'online': False},
+                                                                 {'name': 'АБД', 'time': '13:25', 'group': None, 'online': False},
+                                                                 {'name': 'ИС УПК', 'time': '15:10', 'group': None, 'online': False},
+                                                                 {'name': 'РИКТ и ОП', 'time': '16:55', 'group': None, 'online': False},
+                                                                 {'name': 'ИС УПК', 'time': '18:40', 'group': 2, 'online': False}]
+
+
 
 

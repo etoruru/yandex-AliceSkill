@@ -4,36 +4,36 @@ import json
 import timetable
 
 
+PHRASES_TODAY = {'cкажи расписание на сегодня', 'какие уроки сегодня', 'какие предметы сегодня',
+                 'что сегодня по расписанию', 'какие сегодня уроки', 'какие сегодня пары', 'какие пары на сегодня'}
 
 app = Flask(__name__)
 
 
 @app.route('/alice', methods=['POST'])
 def main():
-    request_data = request.get_json()
+    payload = request.get_json() or {}
 
-    response = create_response(request_data)
+    response = create_response(payload)
 
     return json.dumps(response, indent=4)
 
 
-def create_response(request):
-    version = request['version']
-    session = request['session']
-    content = request['request']['command']
-    if not content:
-        content = "Привет. Спроси у меня что-то."
-    elif is_query_timetable_today(content):
-        content = make_today_lessons_phrase()
+def create_response(payload):
+    version = payload.get('version')
+    session = payload.get('session')
+    command = payload.get('request', {}).get('command')
+    if not command:
+        command = "Привет. Спроси у меня что-то."
+    elif is_query_timetable_today(command):
+        command = make_today_lessons_phrase()
 
-    response = {'text': content, 'end_session': 'false'}
+    response = {'text': command, 'end_session': 'false'}
     return {'version': version, 'session': session, 'response': response}
 
 
 def is_query_timetable_today(phrase):
-    query_phrases_today = ['cкажи расписание на сегодня', 'какие уроки сегодня', 'какие предметы сегодня',
-                           'что сегодня по расписанию', 'какие сегодня уроки']
-    return True if phrase.lower() in query_phrases_today else False
+    return phrase.lower() in PHRASES_TODAY
 
 
 def make_today_lessons_phrase():

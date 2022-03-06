@@ -4,8 +4,15 @@ import json
 import timetable
 
 
-PHRASES_TODAY = {'cкажи расписание на сегодня', 'какие уроки сегодня', 'какие предметы сегодня',
-                 'что сегодня по расписанию', 'какие сегодня уроки', 'какие сегодня пары', 'какие пары на сегодня'}
+PHRASES_TODAY = {
+    'cкажи расписание на сегодня',
+    'какие уроки сегодня',
+    'какие предметы сегодня',
+    'что сегодня по расписанию',
+    'какие сегодня уроки',
+    'какие сегодня пары',
+    'какие пары на сегодня',
+}
 
 app = Flask(__name__)
 
@@ -24,11 +31,11 @@ def create_response(payload):
     session = payload.get('session')
     command = payload.get('request', {}).get('command')
     if not command:
-        command = "Привет. Спроси у меня что-то."
+        phrase = "Привет. Спроси у меня что-то."
     elif is_query_timetable_today(command):
-        command = make_today_lessons_phrase()
+        phrase = make_today_lessons_phrase()
 
-    response = {'text': command, 'end_session': 'false'}
+    response = {'text': phrase, 'end_session': 'false'}
     return {'version': version, 'session': session, 'response': response}
 
 

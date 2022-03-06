@@ -1,49 +1,61 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request
+from datetime import date
 import json
-import user_actions
+import timetable
 
+
+PHRASES_TODAY = {
+    'cкажи расписание на сегодня',
+    'какие уроки сегодня',
+    'какие предметы сегодня',
+    'что сегодня по расписанию',
+    'какие сегодня уроки',
+    'какие сегодня пары',
+    'какие пары на сегодня',
+}
 
 app = Flask(__name__)
 
-# for testing
 
-@app.route('/', methods=['POST', 'GET'])
-def get():
-    if request.method == "POST":
-        quest= request.form["nm"]
-        return redirect(url_for("answer", question=quest))
-    else:
-        return render_template("index.html")
+@app.route('/alice', methods=['POST'])
+def main():
+    payload = request.get_json() or {}
 
-@app.route('/<question>')
-def answer(question):
-    return f'<h3>{make_answer(question)}</h3>'
-    #return f'<h3>{make_answer(question)}</h3>'
+    response = create_response(payload)
+
+    return json.dumps(response, indent=4)
 
 
-# @app.route('/', methods=['POST'])
-# def main():
-#     request_data = request.get_json()
-#
-#     response = create_response(request_data)
-#
-#     return json.dumps(response, indent=4)
+def create_response(payload):
+    version = payload.get('version')
+    session = payload.get('session')
+    command = payload.get('request', {}).get('command')
+    if not command:
+        phrase = "Привет. Спроси у меня что-то."
+    elif is_query_timetable_today(command):
+        phrase = make_today_lessons_phrase()
 
-
-
-
-def create_response(request):
-    version = request['version']
-    session = request['session']
-    content = request['request']['command']
-    if not content:
-        content = "Привет. Спроси у меня что-то."
-    response = {'text': make_answer(content), 'end_session': 'false'}
+    response = {'text': phrase, 'end_session': 'false'}
     return {'version': version, 'session': session, 'response': response}
 
 
-def make_answer(content):
-    return user_actions.make_answer(content)
+def is_query_timetable_today(phrase):
+    return phrase.lower() in PHRASES_TODAY
 
-if __name__ == '__main__':
-    print(make_answer("'как зовут декана'"))
+
+def make_today_lessons_phrase():
+    lessons = timetable.get_lessons_for_day(date.today())
+    name_lessons = []
+    if lessons:
+        for lesson in lessons:
+            name_lessons.append(lesson.get('name'))
+        return 'Сегодня у вас: ' + ', '.join(name_lessons)
+    else:
+        return 'Сегодня нет пар'
+
+
+
+
+
+
+

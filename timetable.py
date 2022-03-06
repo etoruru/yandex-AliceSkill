@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 import json
 
 
@@ -27,6 +27,7 @@ def get_day_type(date):
 def get_lessons_for_day(date):
     """ reads timetable for a certain day, return list of dicts, sorted by time; date-datetime """
     day = date.strftime("%A")
+
     timetable = read()
 
     if timetable.get(day):

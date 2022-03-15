@@ -1,6 +1,9 @@
-from datetime import date
+
+import app
 import timetable
-import main
+
+from datetime import date
+
 import time_machine
 
 
@@ -18,23 +21,17 @@ def test_get_lessons():
 
 
 def test_query_lessons_for_today():
-    assert main.is_query_timetable_today('какие сегодня уроки') == True
+    assert app.is_query_timetable_today('какие сегодня уроки') == True
 
 
 def test_query_lessons_for_not_today():
-    assert main.is_query_timetable_today('какие завтра пары') == False
+    assert app.is_query_timetable_today('какие завтра пары') == False
 
 
 def test_make_phrase_not_have_lessons_today():
-    assert main.make_today_lessons_phrase() == 'Сегодня нет пар', "Should be phrase 'no lessons today' "
+    assert app.make_today_lessons_phrase() == 'Сегодня нет пар', "Should be phrase 'no lessons today' "
 
 
 def test_make_phrase_have_lessons_today():
     with time_machine.travel(date(2022, 2, 25)):
-        assert main.make_today_lessons_phrase() == 'Сегодня у вас: ФМ и ИА, АБД, ИС УПК, РИКТ и ОП, ИС УПК'
-
-
-
-
-
-
+        assert app.make_today_lessons_phrase() == 'Сегодня у вас: ФМ и ИА, АБД, ИС УПК, РИКТ и ОП, ИС УПК'

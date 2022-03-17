@@ -1,6 +1,8 @@
-from datetime import date
-import timetable
 import app
+import timetable
+
+from datetime import date
+
 import time_machine
 
 
@@ -33,6 +35,7 @@ def test_make_phrase_not_have_lessons_today():
 def test_make_phrase_have_lessons_today():
     with time_machine.travel(date(2022, 2, 25)):
         assert app.make_today_lessons_phrase() == 'Сегодня у вас: ФМ и ИА, АБД, ИС УПК, РИКТ и ОП, ИС УПК'
+
 
 
 

@@ -37,8 +37,12 @@ def test_make_phrase_have_lessons_today():
         assert app.make_today_lessons_phrase() == 'Сегодня у вас: ФМ и ИА, АБД, ИС УПК, РИКТ и ОП, ИС УПК'
 
 
+def test_make_phrase_not_have_lessons_tomorrow():
+    with time_machine.travel(date(2022, 3, 14)):
+        assert app.make_tomorrow_lessons_phrase() == 'Завтра нет пар'
 
 
-
-
+def test_make_phrase_have_lessons_tomorrow():
+    with time_machine.travel(date(2022, 3, 16)):
+        assert app.make_tomorrow_lessons_phrase() == 'Завтра у вас: Социология, Философия'
 

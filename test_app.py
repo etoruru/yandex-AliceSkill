@@ -44,5 +44,18 @@ def test_make_phrase_not_have_lessons_tomorrow():
 
 def test_make_phrase_have_lessons_tomorrow():
     with time_machine.travel(date(2022, 3, 16)):
-        assert app.make_tomorrow_lessons_phrase() == 'Завтра у вас: Социология, Философия'
+        assert app.make_tomorrow_lessons_phrase() == 'Завтра у вас будет: Социология, Философия'
+
+
+def test_is_query_for_tomorrow():
+    with time_machine.travel(date(2022, 3, 14)):
+        assert app.is_query_timetable_tomorrow('какие завтра пары') == True
+
+
+def test_is_query_for_timetable():
+    assert app.is_query_for_timetable('какие уроки сегодня') == True
+
+
+def test_is_query_not_for_timetable():
+    assert app.is_query_for_timetable('спасибо') == False
 

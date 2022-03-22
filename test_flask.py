@@ -1,5 +1,10 @@
 import pytest
+from datetime import date
+
+import time_machine
+
 from app import app
+
 
 test_data = {
     "session": {
@@ -38,18 +43,21 @@ def client():
 
 
 def test_main_app_today(client):
-    response = client.post('/alice', json={
-        "request": {
-            "command": "какие уроки сегодня"
-        }
-    })
-    assert "Сегодня нет пар" == response.json["response"]["text"]
+    with time_machine.travel(date(2022, 3, 15)):
+        response = client.post('/alice', json={
+            "request": {
+                "command": "какие уроки сегодня"
+            }
+        })
+        assert "Сегодня нет пар" == response.json["response"]["text"]
 
 
 def test_main_app_tomorrow(client):
-    response = client.post('/alice', json={
-        "request": {
-            "command": "какие уроки сегодня"
-        }
-    })
-    assert "Сегодня нет пар" == response.json["response"]["text"]
+    with time_machine.travel(date(2022, 3, 14)):
+         response = client.post('/alice', json={
+             "request": {
+                "command": "какие уроки завтра"
+            }
+         })
+         assert "Завтра нет пар" == response.json["response"]["text"]
+

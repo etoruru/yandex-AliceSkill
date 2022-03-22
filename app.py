@@ -1,21 +1,26 @@
 from flask import Flask, request, jsonify
 from datetime import date
-import json
+import datetime
+
 import timetable
 
-
-PHRASES_TODAY = {
-    'cкажи расписание на сегодня',
-    'какие уроки сегодня',
-    'какие предметы сегодня',
-    'что сегодня по расписанию',
-    'какие сегодня уроки',
-    'какие сегодня пары',
-    'какие пары на сегодня',
+TIMETABLE_FLAGS = {
+    'расписание',
+    'уроки',
+    'пары',
 }
 
-# завтра
-# понедельник...
+TOMORROW = 'завтра'
+YESTERDAY = 'вчера'
+
+DAYS = {
+    'понедельник',
+    'вторник',
+    'среда',
+    'четверг',
+    'пятница',
+    'суббота',
+}
 
 app = Flask(__name__)
 
@@ -36,23 +41,77 @@ def create_response(payload):
     phrase = ''
     if not command:
         phrase = "Привет. Спроси у меня что-то."
-    elif is_query_timetable_today(command):
-        phrase = make_today_lessons_phrase()
+    elif is_query_for_timetable(command):
+        if is_query_timetable_yesterday(command):
+            phrase = make_yesterday_lessons_phrase()
+        elif is_query_timetable_tomorrow(command):
+            phrase = make_tomorrow_lessons_phrase()
+        elif is_query_for_particular_day(command):
+            phrase = make_particular_day_lessons_phrase()
+        else:
+            phrase = make_today_lessons_phrase()
+    else:
+        pass
 
     response = {'text': phrase, 'end_session': 'false'}
     return {'version': version, 'session': session, 'response': response}
 
 
-def is_query_timetable_today(phrase):
-    return phrase.lower() in PHRASES_TODAY
+def is_query_for_timetable(phrase):
+    lexems = phrase.lower().split()
+    return bool(TIMETABLE_FLAGS.intersection(set(lexems)))
+
+
+def is_query_timetable_yesterday(phrase):
+    return phrase.lower().find(YESTERDAY) != -1
+
+
+def is_query_timetable_tomorrow(phrase):
+    return phrase.lower().find(TOMORROW) != -1
+
+
+def is_query_for_particular_day(phrase):
+    lexems = phrase.lower().split()
+    return bool(DAYS.intersection(set(lexems)))
+
+
+def get_lessons_list(lessons):
+    return [lesson.get('name') for lesson in lessons]
+
 
 
 def make_today_lessons_phrase():
     lessons = timetable.get_lessons_for_day(date.today())
-    name_lessons = []
     if lessons:
-        for lesson in lessons:
-            name_lessons.append(lesson.get('name'))
+        name_lessons = get_lessons_list(lessons)
         return 'Сегодня у вас: ' + ', '.join(name_lessons)
     else:
         return 'Сегодня нет пар'
+
+
+def make_tomorrow_lessons_phrase():
+    tomorrow_date = date.today() + datetime.timedelta(days=1)
+    lessons = timetable.get_lessons_for_day(tomorrow_date)
+    if lessons:
+        name_lessons = get_lessons_list(lessons)
+        return 'Завтра у вас будет: ' + ', '.join(name_lessons)
+    else:
+        return 'Завтра нет пар'
+
+
+def make_yesterday_lessons_phrase():
+    yesterday_date = date.today() - datetime.timedelta(days=1)
+    lessons = timetable.get_lessons_for_day(yesterday_date)
+    if lessons:
+        name_lessons = get_lessons_list(lessons)
+        return 'Вчера у вас было: ' + ', '.join(name_lessons)
+    else:
+        return 'Вчера пар не было'
+
+
+def make_particular_day_lessons_phrase():
+    pass
+
+
+if __name__ == '__main__':
+    is_query_for_timetable('какие уроки сегодня')

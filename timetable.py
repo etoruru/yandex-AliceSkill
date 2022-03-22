@@ -24,9 +24,16 @@ def get_day_type(date):
         return 'odd'
 
 
+def get_day(date):
+    if isinstance(date, str):
+        return date
+    else:
+        return date.strftime("%A")
+
+
 def get_lessons_for_day(date):
     """ reads timetable for a certain day, return list of dicts, sorted by time; date-datetime """
-    day = date.strftime("%A")
+    day = get_day(date)
 
     timetable = read()
 
@@ -44,7 +51,4 @@ def get_lessons_for_day(date):
         return current_timetable or None
     else:
         return None
-
-
-
 

@@ -10,7 +10,6 @@ TIMETABLE_FLAGS = {
     'пары',
 }
 
-TODAY = 'сегодня'
 TOMORROW = 'завтра'
 YESTERDAY = 'вчера'
 
@@ -43,14 +42,14 @@ def create_response(payload):
     if not command:
         phrase = "Привет. Спроси у меня что-то."
     elif is_query_for_timetable(command):
-        if is_query_timetable_today(command):
-            phrase = make_today_lessons_phrase()
+        if is_query_timetable_yesterday(command):
+            phrase = make_yesterday_lessons_phrase()
         elif is_query_timetable_tomorrow(command):
             phrase = make_tomorrow_lessons_phrase()
         elif is_query_for_particular_day(command):
             phrase = make_particular_day_lessons_phrase()
         else:
-            phrase = make_yesterday_lessons_phrase()
+            phrase = make_today_lessons_phrase()
     else:
         pass
 
@@ -59,39 +58,32 @@ def create_response(payload):
 
 
 def is_query_for_timetable(phrase):
-    if set(phrase.lower().split()) & TIMETABLE_FLAGS:
-        return True
-    else:
-        return False
+    lexems = phrase.lower().split()
+    return bool(TIMETABLE_FLAGS.intersection(set(lexems)))
 
 
-def is_query_timetable_today(phrase):
-    if phrase.lower().find(TODAY) != -1:
-        return True
-    else:
-        return False
+def is_query_timetable_yesterday(phrase):
+    return phrase.lower().find(YESTERDAY) != -1
 
 
 def is_query_timetable_tomorrow(phrase):
-    if phrase.lower().find(TOMORROW) != -1:
-        return True
-    else:
-        return False
+    return phrase.lower().find(TOMORROW) != -1
 
 
 def is_query_for_particular_day(phrase):
-    if set(phrase.lower().split()) & DAYS:
-        return True
-    else:
-        return False
+    lexems = phrase.lower().split()
+    return bool(DAYS.intersection(set(lexems)))
+
+
+def get_lessons_list(lessons):
+    return [lesson.get('name') for lesson in lessons]
+
 
 
 def make_today_lessons_phrase():
     lessons = timetable.get_lessons_for_day(date.today())
-    name_lessons = []
     if lessons:
-        for lesson in lessons:
-            name_lessons.append(lesson.get('name'))
+        name_lessons = get_lessons_list(lessons)
         return 'Сегодня у вас: ' + ', '.join(name_lessons)
     else:
         return 'Сегодня нет пар'
@@ -100,10 +92,8 @@ def make_today_lessons_phrase():
 def make_tomorrow_lessons_phrase():
     tomorrow_date = date.today() + datetime.timedelta(days=1)
     lessons = timetable.get_lessons_for_day(tomorrow_date)
-    name_lessons = []
     if lessons:
-        for lesson in lessons:
-            name_lessons.append(lesson.get('name'))
+        name_lessons = get_lessons_list(lessons)
         return 'Завтра у вас будет: ' + ', '.join(name_lessons)
     else:
         return 'Завтра нет пар'
@@ -112,10 +102,8 @@ def make_tomorrow_lessons_phrase():
 def make_yesterday_lessons_phrase():
     yesterday_date = date.today() - datetime.timedelta(days=1)
     lessons = timetable.get_lessons_for_day(yesterday_date)
-    name_lessons = []
     if lessons:
-        for lesson in lessons:
-            name_lessons.append(lesson.get('name'))
+        name_lessons = get_lessons_list(lessons)
         return 'Вчера у вас было: ' + ', '.join(name_lessons)
     else:
         return 'Вчера пар не было'

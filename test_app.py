@@ -19,14 +19,6 @@ def test_get_lessons():
             {'name': 'ИС УПК', 'time': '18:40', 'group': 2, 'online': False}], "Should be a list of dicts"
 
 
-def test_query_lessons_for_today():
-    assert app.is_query_timetable_today('какие сегодня уроки') == True
-
-
-def test_query_lessons_for_not_today():
-    assert app.is_query_timetable_today('какие завтра пары') == False
-
-
 def test_make_phrase_not_have_lessons_today():
     with time_machine.travel(date(2022, 3, 8)):
         assert app.make_today_lessons_phrase() == 'Сегодня нет пар', "Should be phrase 'no lessons today' "

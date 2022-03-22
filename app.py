@@ -49,6 +49,7 @@ def create_response(payload):
         elif is_query_for_particular_day(command):
             phrase = make_particular_day_lessons_phrase()
         else:
+            # я подумала, будет лучше если не указано на какой момент нужно расписание, сделать его на сегодня
             phrase = make_today_lessons_phrase()
     else:
         pass
@@ -78,6 +79,10 @@ def is_query_for_particular_day(phrase):
 def get_lessons_list(lessons):
     return [lesson.get('name') for lesson in lessons]
 
+
+def get_day_from_phrase(phrase):
+    lexems = phrase.lower().split()
+    return list(DAYS.intersection(set(lexems)))[0]
 
 
 def make_today_lessons_phrase():
@@ -109,9 +114,15 @@ def make_yesterday_lessons_phrase():
         return 'Вчера пар не было'
 
 
-def make_particular_day_lessons_phrase():
-    pass
+def make_particular_day_lessons_phrase(command):
+    day = get_day_from_phrase(command)
+    lessons = timetable.get_lessons_for_day(day)
+    if lessons:
+        name_lessons = get_lessons_list(lessons)
+        return 'В {} у вас: '.format(day) + ', '.join(name_lessons)
+    else:
+        return 'В {} пар нет'.format(day)
 
 
-if __name__ == '__main__':
-    is_query_for_timetable('какие уроки сегодня')
+
+

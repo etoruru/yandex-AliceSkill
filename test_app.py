@@ -51,3 +51,10 @@ def test_is_query_for_timetable():
 def test_is_query_not_for_timetable():
     assert app.is_query_for_timetable('спасибо') == False
 
+
+def test_make_monday_day_lessons_phrase():
+    assert app.make_particular_day_lessons_phrase('какие уроки в понедельник') == 'В понедельник у вас: Логистика, ИТУ, БП, РИКТ и ОП'
+
+
+def test_make_tuesday_day_lessons_phrase():
+    assert app.make_particular_day_lessons_phrase('какие уроки во вторник') == 'В вторник пар нет'

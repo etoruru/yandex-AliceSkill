@@ -1,8 +1,17 @@
-from datetime import date
+import datetime
 import json
 
 
 DATA_FILE = "timetable.json"
+
+DAYS = {
+    'понедельник': 'Monday',
+    'вторник': 'Tuesday',
+    'среда': 'Wensday',
+    'четверг': 'Thursday',
+    'пятница': 'Friday',
+    'суббота': 'Saturday',
+}
 
 
 def read():
@@ -15,8 +24,10 @@ def save(timetable):
         json.dump(timetable, f, indent=4, ensure_ascii=False)
 
 
-def get_day_type(date):
+def get_week_type(date):
     """ counts type week """
+    if isinstance(date, str):
+        date = datetime.date.today()
     (_, num_week, _) = date.isocalendar()
     if num_week % 2 == 0:
         return 'even'
@@ -26,9 +37,13 @@ def get_day_type(date):
 
 def get_day(date):
     if isinstance(date, str):
-        return date
+        return translate_day(date)
     else:
         return date.strftime("%A")
+
+
+def translate_day(day):
+    return DAYS.get(day)
 
 
 def get_lessons_for_day(date):
@@ -38,7 +53,7 @@ def get_lessons_for_day(date):
     timetable = read()
 
     if timetable.get(day):
-        week_type = get_day_type(date)
+        week_type = get_week_type(date)
         current_timetable = []
         persistent_tt = timetable[day].get('persistent')
         period_tt = timetable[day].get(week_type)

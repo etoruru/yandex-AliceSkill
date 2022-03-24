@@ -49,7 +49,7 @@ def test_main_app_today(client):
                 "command": "какие уроки сегодня"
             }
         })
-        assert "Сегодня нет пар" == response.json["response"]["text"]
+        assert "Сегодня нет пар. " == response.json["response"]["text"]
 
 
 def test_main_app_tomorrow(client):
@@ -59,5 +59,5 @@ def test_main_app_tomorrow(client):
                 "command": "какие уроки завтра"
             }
          })
-         assert "Завтра нет пар" == response.json["response"]["text"]
+         assert "Завтра нет пар. " == response.json["response"]["text"]
 

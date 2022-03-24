@@ -49,7 +49,6 @@ def create_response(payload):
         elif is_query_for_particular_day(command):
             phrase = make_particular_day_lessons_phrase()
         else:
-            # я подумала, будет лучше если не указано на какой момент нужно расписание, сделать его на сегодня
             phrase = make_today_lessons_phrase()
     else:
         pass
@@ -82,7 +81,10 @@ def get_lessons_list(lessons):
 
 def get_day_from_phrase(phrase):
     lexems = phrase.lower().split()
-    return list(DAYS.intersection(set(lexems)))[0]
+    if DAYS.intersection(set(lexems)):
+        return list(DAYS.intersection(set(lexems)))[0]
+    else:
+        return 'запрос не содержит день'
 
 
 def make_today_lessons_phrase():
@@ -91,7 +93,7 @@ def make_today_lessons_phrase():
         name_lessons = get_lessons_list(lessons)
         return 'Сегодня у вас: ' + ', '.join(name_lessons)
     else:
-        return 'Сегодня нет пар'
+        return 'Сегодня нет пар. '
 
 
 def make_tomorrow_lessons_phrase():
@@ -101,7 +103,7 @@ def make_tomorrow_lessons_phrase():
         name_lessons = get_lessons_list(lessons)
         return 'Завтра у вас будет: ' + ', '.join(name_lessons)
     else:
-        return 'Завтра нет пар'
+        return 'Завтра нет пар. '
 
 
 def make_yesterday_lessons_phrase():
@@ -111,7 +113,7 @@ def make_yesterday_lessons_phrase():
         name_lessons = get_lessons_list(lessons)
         return 'Вчера у вас было: ' + ', '.join(name_lessons)
     else:
-        return 'Вчера пар не было'
+        return 'Вчера пар не было. '
 
 
 def make_particular_day_lessons_phrase(command):
@@ -121,7 +123,7 @@ def make_particular_day_lessons_phrase(command):
         name_lessons = get_lessons_list(lessons)
         return 'В {} у вас: '.format(day) + ', '.join(name_lessons)
     else:
-        return 'В {} пар нет'.format(day)
+        return 'В {} пар нет. '.format(day)
 
 
 

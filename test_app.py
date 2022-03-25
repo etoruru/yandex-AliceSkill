@@ -1,4 +1,5 @@
 import app
+import sayings
 import timetable
 
 from datetime import date
@@ -21,7 +22,7 @@ def test_get_lessons():
 
 def test_make_phrase_not_have_lessons_today():
     with time_machine.travel(date(2022, 3, 8)):
-        assert app.make_today_lessons_phrase() == 'Сегодня нет пар. ', "Should be phrase 'no lessons today' "
+        assert app.make_today_lessons_phrase().lstrip('Сегодня нет пар. ') in sayings.HARM_IDLENESS
 
 
 def test_make_phrase_have_lessons_today():
@@ -31,7 +32,7 @@ def test_make_phrase_have_lessons_today():
 
 def test_make_phrase_not_have_lessons_tomorrow():
     with time_machine.travel(date(2022, 3, 14)):
-        assert app.make_tomorrow_lessons_phrase() == 'Завтра нет пар. '
+        assert app.make_tomorrow_lessons_phrase().lstrip('Завтра нет пар. ') in sayings.HARM_IDLENESS
 
 
 def test_make_phrase_have_lessons_tomorrow():
@@ -58,4 +59,8 @@ def test_make_monday_day_lessons_phrase():
 
 
 def test_make_tuesday_day_lessons_phrase():
-    assert app.make_particular_day_lessons_phrase('какие уроки во вторник') == 'В вторник пар нет. '
+    assert app.make_particular_day_lessons_phrase('какие уроки во вторник').lstrip('В вторник пар нет. ') in sayings.HARM_IDLENESS
+
+
+
+

@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from datetime import date
 import datetime
+import random
 
+import sayings
 import timetable
 
 TIMETABLE_FLAGS = {
@@ -47,7 +49,7 @@ def create_response(payload):
         elif is_query_timetable_tomorrow(command):
             phrase = make_tomorrow_lessons_phrase()
         elif is_query_for_particular_day(command):
-            phrase = make_particular_day_lessons_phrase()
+            phrase = make_particular_day_lessons_phrase(command)
         else:
             phrase = make_today_lessons_phrase()
     else:
@@ -93,7 +95,7 @@ def make_today_lessons_phrase():
         name_lessons = get_lessons_list(lessons)
         return 'Сегодня у вас: ' + ', '.join(name_lessons)
     else:
-        return 'Сегодня нет пар. '
+        return 'Сегодня нет пар. ' + random.choice(sayings.HARM_IDLENESS)
 
 
 def make_tomorrow_lessons_phrase():
@@ -103,7 +105,7 @@ def make_tomorrow_lessons_phrase():
         name_lessons = get_lessons_list(lessons)
         return 'Завтра у вас будет: ' + ', '.join(name_lessons)
     else:
-        return 'Завтра нет пар. '
+        return 'Завтра нет пар. ' + random.choice(sayings.HARM_IDLENESS)
 
 
 def make_yesterday_lessons_phrase():
@@ -113,7 +115,7 @@ def make_yesterday_lessons_phrase():
         name_lessons = get_lessons_list(lessons)
         return 'Вчера у вас было: ' + ', '.join(name_lessons)
     else:
-        return 'Вчера пар не было. '
+        return 'Вчера пар не было. ' + random.choice(sayings.HARM_IDLENESS)
 
 
 def make_particular_day_lessons_phrase(command):
@@ -123,7 +125,7 @@ def make_particular_day_lessons_phrase(command):
         name_lessons = get_lessons_list(lessons)
         return 'В {} у вас: '.format(day) + ', '.join(name_lessons)
     else:
-        return 'В {} пар нет. '.format(day)
+        return 'В {} пар нет. '.format(day) + random.choice(sayings.HARM_IDLENESS)
 
 
 

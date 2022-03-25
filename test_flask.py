@@ -3,6 +3,7 @@ from datetime import date
 
 import time_machine
 
+import sayings
 from app import app
 
 
@@ -49,7 +50,7 @@ def test_main_app_today(client):
                 "command": "какие уроки сегодня"
             }
         })
-        assert "Сегодня нет пар. " == response.json["response"]["text"]
+        assert response.json["response"]["text"].lstrip('Сегодня нет пар. ') in sayings.HARM_IDLENESS
 
 
 def test_main_app_tomorrow(client):
@@ -59,5 +60,5 @@ def test_main_app_tomorrow(client):
                 "command": "какие уроки завтра"
             }
          })
-         assert "Завтра нет пар. " == response.json["response"]["text"]
+         assert response.json["response"]["text"].lstrip('Завтра нет пар. ') in sayings.HARM_IDLENESS
 

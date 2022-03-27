@@ -69,5 +69,5 @@ def test_main_app_thank(client):
             "command": "Спасибо большое"
         }
     })
-    assert response.json["response"]["text"].lstrip('Пожалуйста и помните ') in sayings.THANK_RESPONSE
+    assert response.json["response"]["text"].lstrip('Пожалуйста и помните: ') in sayings.THANK_RESPONSE
 

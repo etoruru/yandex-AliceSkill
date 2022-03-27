@@ -116,7 +116,7 @@ def concatenate_with_and(lessons):
 
 
 def post_thank_response():
-    return ' и помните ' + random.choice(sayings.THANK_RESPONSE)
+    return ' и помните: ' + random.choice(sayings.THANK_RESPONSE)
 
 
 def make_today_lessons_phrase():

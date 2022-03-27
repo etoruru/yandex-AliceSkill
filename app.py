@@ -89,13 +89,17 @@ def get_day_from_phrase(phrase):
         return 'запрос не содержит день'
 
 
+def post_idleness():
+    return ', но помните ' + random.choice(sayings.HARM_IDLENESS)
+
+
 def make_today_lessons_phrase():
     lessons = timetable.get_lessons_for_day(date.today())
     if lessons:
         name_lessons = get_lessons_list(lessons)
         return 'Сегодня у вас: ' + ', '.join(name_lessons)
     else:
-        return 'Сегодня нет пар. ' + random.choice(sayings.HARM_IDLENESS)
+        return 'Сегодня нет пар' + post_idleness()
 
 
 def make_tomorrow_lessons_phrase():
@@ -105,7 +109,7 @@ def make_tomorrow_lessons_phrase():
         name_lessons = get_lessons_list(lessons)
         return 'Завтра у вас будет: ' + ', '.join(name_lessons)
     else:
-        return 'Завтра нет пар. ' + random.choice(sayings.HARM_IDLENESS)
+        return 'Завтра нет пар' + post_idleness()
 
 
 def make_yesterday_lessons_phrase():
@@ -115,7 +119,7 @@ def make_yesterday_lessons_phrase():
         name_lessons = get_lessons_list(lessons)
         return 'Вчера у вас было: ' + ', '.join(name_lessons)
     else:
-        return 'Вчера пар не было. ' + random.choice(sayings.HARM_IDLENESS)
+        return 'Вчера пар не было.'
 
 
 def make_particular_day_lessons_phrase(command):
@@ -125,8 +129,6 @@ def make_particular_day_lessons_phrase(command):
         name_lessons = get_lessons_list(lessons)
         return 'В {} у вас: '.format(day) + ', '.join(name_lessons)
     else:
-        return 'В {} пар нет. '.format(day) + random.choice(sayings.HARM_IDLENESS)
-
-
+        return 'В {} пар нет'.format(day) + post_idleness()
 
 

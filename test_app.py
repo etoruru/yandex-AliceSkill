@@ -22,22 +22,25 @@ def test_get_lessons():
 
 def test_make_phrase_not_have_lessons_today():
     with time_machine.travel(date(2022, 3, 8)):
-        assert app.make_today_lessons_phrase().lstrip('Сегодня нет пар, но помните ') in sayings.HARM_IDLENESS
+        assert app.make_today_lessons_phrase().lstrip('Сегодня нет пар, но помните ') \
+               in sayings.HARM_IDLENESS
 
 
 def test_make_phrase_have_lessons_today():
     with time_machine.travel(date(2022, 2, 25)):
-        assert app.make_today_lessons_phrase() == 'Сегодня у вас: ФМ и ИА, АБД, ИС УПК, РИКТ и ОП, ИС УПК'
+        assert app.make_today_lessons_phrase() == \
+               'Сегодня у вас: ФМ и ИА, АБД, ИС УПК, РИКТ и ОП и ИС УПК у второй группы'
 
 
 def test_make_phrase_not_have_lessons_tomorrow():
     with time_machine.travel(date(2022, 3, 14)):
-        assert app.make_tomorrow_lessons_phrase().lstrip('Завтра нет пар, но помните ') in sayings.HARM_IDLENESS
+        assert app.make_tomorrow_lessons_phrase().lstrip('Завтра нет пар, но помните ') \
+               in sayings.HARM_IDLENESS
 
 
 def test_make_phrase_have_lessons_tomorrow():
     with time_machine.travel(date(2022, 3, 16)):
-        assert app.make_tomorrow_lessons_phrase() == 'Завтра у вас будет: Социология, Философия'
+        assert app.make_tomorrow_lessons_phrase() == 'Завтра у вас будет: Социология и Философия'
 
 
 def test_is_query_for_tomorrow():
@@ -55,11 +58,12 @@ def test_is_query_not_for_timetable():
 
 def test_make_monday_day_lessons_phrase():
     assert app.make_particular_day_lessons_phrase('какие уроки в понедельник') == \
-           'В понедельник у вас: Логистика, ИТУ, БП, РИКТ и ОП'
+           'В понедельник у вас: Логистика, ИТУ, БП и РИКТ и ОП'
 
 
 def test_make_tuesday_day_lessons_phrase():
-    assert app.make_particular_day_lessons_phrase('какие уроки во вторник').lstrip('В вторник пар нет, но помните ') in sayings.HARM_IDLENESS
+    assert app.make_particular_day_lessons_phrase('какие уроки во вторник').lstrip('В вторник пар нет, но помните ') \
+           in sayings.HARM_IDLENESS
 
 
 

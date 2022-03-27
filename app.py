@@ -78,7 +78,18 @@ def is_query_for_particular_day(phrase):
 
 
 def get_lessons_list(lessons):
-    return [lesson.get('name') for lesson in lessons]
+    lessons_list = []
+    for lesson in lessons:
+        if lesson.get('group') == 1:
+            name_lesson = lesson.get('name') + ' у первой группы'
+            lessons_list.append(name_lesson)
+        elif lesson.get('group') == 2:
+            name_lesson = lesson.get('name') + ' у второй группы'
+            lessons_list.append(name_lesson)
+        else:
+            lessons_list.append(lesson.get('name'))
+
+    return lessons_list
 
 
 def get_day_from_phrase(phrase):
@@ -93,11 +104,15 @@ def post_idleness():
     return ', но помните ' + random.choice(sayings.HARM_IDLENESS)
 
 
+def concatenate_with_and(lessons):
+    return ', '.join(lessons[:-1]) + ' и ' + lessons[-1]
+
+
 def make_today_lessons_phrase():
     lessons = timetable.get_lessons_for_day(date.today())
     if lessons:
         name_lessons = get_lessons_list(lessons)
-        return 'Сегодня у вас: ' + ', '.join(name_lessons)
+        return 'Сегодня у вас: ' + concatenate_with_and(name_lessons)
     else:
         return 'Сегодня нет пар' + post_idleness()
 
@@ -106,8 +121,8 @@ def make_tomorrow_lessons_phrase():
     tomorrow_date = date.today() + datetime.timedelta(days=1)
     lessons = timetable.get_lessons_for_day(tomorrow_date)
     if lessons:
-        name_lessons = get_lessons_list(lessons)
-        return 'Завтра у вас будет: ' + ', '.join(name_lessons)
+            name_lessons = get_lessons_list(lessons)
+            return 'Завтра у вас будет: ' + concatenate_with_and(name_lessons)
     else:
         return 'Завтра нет пар' + post_idleness()
 
@@ -117,7 +132,7 @@ def make_yesterday_lessons_phrase():
     lessons = timetable.get_lessons_for_day(yesterday_date)
     if lessons:
         name_lessons = get_lessons_list(lessons)
-        return 'Вчера у вас было: ' + ', '.join(name_lessons)
+        return 'Вчера у вас было: ' + concatenate_with_and(name_lessons)
     else:
         return 'Вчера пар не было.'
 
@@ -127,7 +142,7 @@ def make_particular_day_lessons_phrase(command):
     lessons = timetable.get_lessons_for_day(day)
     if lessons:
         name_lessons = get_lessons_list(lessons)
-        return 'В {} у вас: '.format(day) + ', '.join(name_lessons)
+        return 'В {} у вас: '.format(day) + concatenate_with_and(name_lessons)
     else:
         return 'В {} пар нет'.format(day) + post_idleness()
 

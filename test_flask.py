@@ -50,7 +50,7 @@ def test_main_app_today(client):
                 "command": "какие уроки сегодня"
             }
         })
-        assert response.json["response"]["text"].lstrip('Сегодня нет пар, но помните ') in sayings.HARM_IDLENESS
+        assert response.json["response"]["text"].lstrip('Сегодня нет пар, но помните: ') in sayings.HARM_IDLENESS
 
 
 def test_main_app_tomorrow(client):
@@ -60,7 +60,7 @@ def test_main_app_tomorrow(client):
                 "command": "какие уроки завтра"
             }
          })
-         assert response.json["response"]["text"].lstrip('Завтра нет пар, но помните ') in sayings.HARM_IDLENESS
+         assert response.json["response"]["text"].lstrip('Завтра нет пар, но помните: ') in sayings.HARM_IDLENESS
 
 
 def test_main_app_thank(client):

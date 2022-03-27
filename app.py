@@ -15,6 +15,8 @@ TIMETABLE_FLAGS = {
 TOMORROW = 'завтра'
 YESTERDAY = 'вчера'
 
+THANK = 'спасибо'
+
 DAYS = {
     'понедельник',
     'вторник',
@@ -53,7 +55,8 @@ def create_response(payload):
         else:
             phrase = make_today_lessons_phrase()
     else:
-        pass
+        if is_command_thank(command):
+            phrase = answer_for_thank()
 
     response = {'text': phrase, 'end_session': 'false'}
     return {'version': version, 'session': session, 'response': response}
@@ -77,6 +80,10 @@ def is_query_for_particular_day(phrase):
     return bool(DAYS.intersection(set(lexems)))
 
 
+def is_command_thank(phrase):
+    return phrase.lower().find(THANK) != -1
+
+
 def get_lessons_list(lessons):
     return [lesson.get('name') for lesson in lessons]
 
@@ -91,6 +98,10 @@ def get_day_from_phrase(phrase):
 
 def post_idleness():
     return ', но помните ' + random.choice(sayings.HARM_IDLENESS)
+
+
+def post_thank_response():
+    return ' и помните ' + random.choice(sayings.THANK_RESPONSE)
 
 
 def make_today_lessons_phrase():
@@ -131,4 +142,7 @@ def make_particular_day_lessons_phrase(command):
     else:
         return 'В {} пар нет'.format(day) + post_idleness()
 
+
+def answer_for_thank():
+    return 'Пожалуйста' + post_thank_response()
 

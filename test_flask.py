@@ -22,7 +22,7 @@ test_data = {
         "new": True
     },
     "request": {
-        "command": "какие уроки сегодня",
+        "command": "Спасибо большое",
         "original_utterance": "",
         "nlu": {
             "tokens": [],
@@ -61,4 +61,13 @@ def test_main_app_tomorrow(client):
             }
          })
          assert response.json["response"]["text"].lstrip('Завтра нет пар, но помните ') in sayings.HARM_IDLENESS
+
+
+def test_main_app_thank(client):
+    response = client.post('/alice', json={
+        "request": {
+            "command": "Спасибо большое"
+        }
+    })
+    assert response.json["response"]["text"].lstrip('Пожалуйста и помните ') in sayings.THANK_RESPONSE
 

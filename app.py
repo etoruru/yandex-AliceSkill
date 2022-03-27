@@ -101,7 +101,7 @@ def get_day_from_phrase(phrase):
 
 
 def post_idleness():
-    return ', но помните ' + random.choice(sayings.HARM_IDLENESS)
+    return ', но помните: ' + random.choice(sayings.HARM_IDLENESS)
 
 
 def concatenate_with_and(lessons):

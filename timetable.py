@@ -7,7 +7,7 @@ DATA_FILE = "timetable.json"
 DAYS = {
     'понедельник': 'Monday',
     'вторник': 'Tuesday',
-    'среда': 'Wensday',
+    'среда': 'Wednesday',
     'четверг': 'Thursday',
     'пятница': 'Friday',
     'суббота': 'Saturday',
@@ -51,7 +51,6 @@ def get_lessons_for_day(date):
     day = get_day(date)
 
     timetable = read()
-
     if timetable.get(day):
         week_type = get_week_type(date)
         current_timetable = []

@@ -57,14 +57,32 @@ def test_is_query_not_for_timetable():
 
 
 def test_make_monday_day_lessons_phrase():
-    assert app.make_particular_day_lessons_phrase('какие уроки в понедельник') == \
-           'В понедельник у вас: Логистика, ИТУ, БП и РИКТ и ОП'
+    with time_machine.travel(date(2022, 3, 14)):
+        assert app.make_particular_day_lessons_phrase('какие уроки в понедельник') == \
+               'В понедельник у вас: Логистика, ИТУ, Логистика и БП'
+
+
+def test_make_wensday_day_lessons_phrase():
+    with time_machine.travel(date(2022, 3, 16)):
+        assert app.make_particular_day_lessons_phrase('какие пары в среду') == \
+               'В среду у вас: Управление ИТ-сервисами и контентом, Управление ИТ-сервисами и контентом и О и УФР'
+
+
+def test_make_friday_day_lessons_phrase():
+    with time_machine.travel(date(2022, 3, 18)):
+        assert app.make_particular_day_lessons_phrase('какие пары в пятницу') == \
+               'В пятницу у вас: ФМ и ИА, АБД, АБД, ИС УПК и ИС УПК у первой группы'
+
 
 
 def test_make_tuesday_day_lessons_phrase():
-    assert app.make_particular_day_lessons_phrase('какие уроки во вторник').lstrip('В вторник пар нет, но помните: ') \
+    assert app.make_particular_day_lessons_phrase('какие уроки во вторник').lstrip('Во вторник пар нет, но помните: ') \
            in sayings.HARM_IDLENESS
 
 
+def test_tomorrow():
+    with time_machine.travel(date(2022, 3, 15)):
+        assert app.make_tomorrow_lessons_phrase() == \
+               'Завтра у вас будет: Управление ИТ-сервисами и контентом, Управление ИТ-сервисами и контентом и О и УФР'
 
 

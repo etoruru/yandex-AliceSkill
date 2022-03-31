@@ -176,7 +176,6 @@ def make_yesterday_lessons_phrase():
 def make_particular_day_lessons_phrase(command):
     day = get_day_from_phrase(command)
     lessons = timetable.get_lessons_for_day(day)
-    print(day)
     if lessons:
         name_lessons = get_lessons_list(lessons)
         return '{} у вас: '.format(DAYS_RESPONSE.get(day)) + concatenate_with_and(name_lessons)

@@ -48,6 +48,35 @@ DAYS_RESPONSE = {
     'воскресенье': 'В воскресенье',
 }
 
+ASK_HELP = {
+    'что ты умеешь',
+    'дай справку',
+    'покажи справку',
+    'помощь',
+    'справка',
+}
+
+ABOUT = """
+Добро пожаловать! Чтобы узнать расписание на сегодня,
+скажите "Какие сегодня пары", 
+для того, чтобы узнать расписание на завтра,
+скажите "Какие завтра пары", 
+узнать расписание на конкретный день,
+произнесите "Какие пары в" и день недели, 
+например, "Какие пары в понедельник". 
+"""
+
+GREETING = """
+Добро пожаловать! Здесь вы можете узнать свое расписание пар,
+сказав "Какие сегодня пары?" или "Какое расписание на понедельник?" 
+Для получение полного списка моих возможностей, скажите "Алиса, дай справку". 
+"""
+
+HELP = """ 
+Извините, я вас не понимаю.
+Чтобы узнать как пользоваться навыком, скажите "Алиса, дай справку".
+"""
+
 app = Flask(__name__)
 
 
@@ -64,9 +93,9 @@ def create_response(payload):
     version = payload.get('version')
     session = payload.get('session')
     command = payload.get('request', {}).get('command')
-    phrase = ''
+    phrase = HELP
     if not command:
-        phrase = "Привет. Спроси у меня что-то."
+        phrase = GREETING
     elif is_query_for_timetable(command):
         if is_query_timetable_yesterday(command):
             phrase = make_yesterday_lessons_phrase()
@@ -79,6 +108,8 @@ def create_response(payload):
     else:
         if is_command_thank(command):
             phrase = answer_for_thank()
+        elif is_command_help(command):
+            phrase = get_help()
 
     response = {'text': phrase, 'end_session': 'false'}
     return {'version': version, 'session': session, 'response': response}
@@ -105,6 +136,10 @@ def is_query_for_particular_day(phrase):
 
 def is_command_thank(phrase):
     return phrase.lower().find(THANK) != -1
+
+
+def is_command_help(phrase):
+    return phrase.lower() in ASK_HELP
 
 
 def get_lessons_list(lessons):
@@ -185,4 +220,8 @@ def make_particular_day_lessons_phrase(command):
 
 def answer_for_thank():
     return 'Пожалуйста' + post_thank_response()
+
+
+def get_help():
+    return ABOUT
 

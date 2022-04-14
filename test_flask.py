@@ -4,7 +4,7 @@ from datetime import date
 import time_machine
 
 import sayings
-from app import app
+from app import app, ABOUT, HELP
 
 
 test_data = {
@@ -50,7 +50,7 @@ def test_main_app_today(client):
                 "command": "какие уроки сегодня"
             }
         })
-        assert response.json["response"]["text"].lstrip('Сегодня нет пар, но помните: ') in sayings.HARM_IDLENESS
+        assert response.json["response"]["text"].replace('Сегодня нет пар, но помните: ', '') in sayings.HARM_IDLENESS
 
 
 def test_main_app_tomorrow(client):
@@ -60,7 +60,7 @@ def test_main_app_tomorrow(client):
                 "command": "какие уроки завтра"
             }
          })
-         assert response.json["response"]["text"].lstrip('Завтра нет пар, но помните: ') in sayings.HARM_IDLENESS
+         assert response.json["response"]["text"].replace('Завтра нет пар, но помните: ', '') in sayings.HARM_IDLENESS
 
 
 def test_main_app_thank(client):
@@ -69,5 +69,22 @@ def test_main_app_thank(client):
             "command": "Спасибо большое"
         }
     })
-    assert response.json["response"]["text"].lstrip('Пожалуйста и помните: ') in sayings.THANK_RESPONSE
+    assert response.json["response"]["text"].replace('Пожалуйста и помните: ', '') in sayings.THANK_RESPONSE
 
+
+def test_main_app_help(client):
+    response = client.post('/alice', json={
+        "request": {
+            "command": "Что ты умеешь"
+        }
+    })
+    assert response.json["response"]["text"] == ABOUT
+
+
+def test_main_app_unrecognized(client):
+    response = client.post('/alice', json={
+        "request": {
+            "command": "Хочу защитить диплом на 5"
+        }
+    })
+    assert response.json["response"]["text"] == HELP

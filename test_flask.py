@@ -4,7 +4,7 @@ from datetime import date
 import time_machine
 
 import sayings
-from app import app
+from app import app, ABOUT, HELP
 
 
 test_data = {
@@ -78,9 +78,7 @@ def test_main_app_help(client):
             "command": "Что ты умеешь"
         }
     })
-    assert response.json["response"]["text"] == """ Добро пожаловать! Чтобы узнать расписание на сегодня, скажите "Какие сегодня пары", 
-                для того, чтобы узнать расписание на завтра, скажите "Какие завтра пары", 
-                узнать расписание на конкретный день, произнесите "Какие пары в и день недели", например, "Какие пары в понедельник" """
+    assert response.json["response"]["text"] == ABOUT
 
 
 def test_main_app_unrecognized(client):
@@ -89,5 +87,4 @@ def test_main_app_unrecognized(client):
             "command": "Хочу защитить диплом на 5"
         }
     })
-    assert response.json["response"]["text"] == 'Извините, я вас не понимаю. ' \
-             'Чтобы узнать как пользоваться навыком, скажите "Алиса, дай справку"'
+    assert response.json["response"]["text"] == HELP

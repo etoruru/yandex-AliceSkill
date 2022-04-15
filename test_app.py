@@ -13,11 +13,11 @@ def test_not_get_lessons():
 
 def test_get_lessons():
     assert timetable.get_lessons_for_day(date(2022, 2, 25)) == \
-           [{'name': 'ФМ и ИА', 'time': '9:45', 'group': None, 'online': False},
-            {'name': 'АБД', 'time': '13:25', 'group': None, 'online': False},
-            {'name': 'ИС УПК', 'time': '15:10', 'group': None, 'online': False},
-            {'name': 'РИКТ и ОП', 'time': '16:55', 'group': None, 'online': False},
-            {'name': 'ИС УПК', 'time': '18:40', 'group': 2, 'online': False}], "Should be a list of dicts"
+           [{'name': 'Финансовая математика и инвестиционный анализ', 'time': '9:45', 'group': None, 'online': False},
+            {'name': 'Автоматизация бухгалтерской деятельности', 'time': '13:25', 'group': None, 'online': False},
+            {'name': 'Информационные системы управления производственной компанией', 'time': '15:10', 'group': None, 'online': False},
+            {'name': 'Рынки информационно-коммуникационных технологий и организация продаж', 'time': '16:55', 'group': None, 'online': False},
+            {'name': 'Информационные системы управления производственной компанией', 'time': '18:40', 'group': 2, 'online': False}]
 
 
 def test_make_phrase_not_have_lessons_today():
@@ -29,7 +29,9 @@ def test_make_phrase_not_have_lessons_today():
 def test_make_phrase_have_lessons_today():
     with time_machine.travel(date(2022, 2, 25)):
         assert app.make_today_lessons_phrase() == \
-               'Сегодня у вас: ФМ и ИА, АБД, ИС УПК, РИКТ и ОП и ИС УПК у второй группы'
+               'Сегодня у вас: Финансовая математика и инвестиционный анализ, Автоматизация бухгалтерской деятельности,' \
+               ' Информационные системы управления производственной компанией, Рынки информационно-коммуникационных технологий и организация продаж' \
+               ' и Информационные системы управления производственной компанией у второй группы'
 
 
 def test_make_phrase_not_have_lessons_tomorrow():
@@ -59,19 +61,22 @@ def test_is_query_not_for_timetable():
 def test_make_monday_day_lessons_phrase():
     with time_machine.travel(date(2022, 3, 14)):
         assert app.make_particular_day_lessons_phrase('какие уроки в понедельник') == \
-               'В понедельник у вас: Логистика, ИТУ, Логистика и БП'
+               'В понедельник у вас: Логистика, Информационные технологии управления, Логистика и Бизнес планирование'
 
 
 def test_make_wensday_day_lessons_phrase():
     with time_machine.travel(date(2022, 3, 16)):
         assert app.make_particular_day_lessons_phrase('какие пары в среду') == \
-               'В среду у вас: Управление ИТ-сервисами и контентом, Управление ИТ-сервисами и контентом и О и УФР'
+               'В среду у вас: Управление ИТ-сервисами и контентом, Управление ИТ-сервисами и контентом ' \
+               'и Оценка и управление финансовыми рисками'
 
 
 def test_make_friday_day_lessons_phrase():
     with time_machine.travel(date(2022, 3, 18)):
         assert app.make_particular_day_lessons_phrase('какие пары в пятницу') == \
-               'В пятницу у вас: ФМ и ИА, АБД, АБД, ИС УПК и ИС УПК у первой группы'
+               'В пятницу у вас: Финансовая математика и инвестиционный анализ, Автоматизация бухгалтерской деятельности,' \
+               ' Автоматизация бухгалтерской деятельности, Информационные системы управления производственной компанией и ' \
+               'Информационные системы управления производственной компанией у первой группы'
 
 
 def test_make_tuesday_day_lessons_phrase():
@@ -82,4 +87,5 @@ def test_make_tuesday_day_lessons_phrase():
 def test_tomorrow():
     with time_machine.travel(date(2022, 3, 15)):
         assert app.make_tomorrow_lessons_phrase() == \
-               'Завтра у вас будет: Управление ИТ-сервисами и контентом, Управление ИТ-сервисами и контентом и О и УФР'
+               'Завтра у вас будет: Управление ИТ-сервисами и контентом, Управление ИТ-сервисами и контентом и ' \
+               'Оценка и управление финансовыми рисками'

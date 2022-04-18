@@ -142,7 +142,15 @@ def is_command_help(phrase):
     return phrase.lower() in ASK_HELP
 
 
-def get_lessons_list(lessons):
+def count_same_lessons(lessons):
+    amount_lessons = {}
+    for lesson in lessons:
+        count = amount_lessons.get(lesson, 0)
+        amount_lessons[lesson] = count + 1
+    return amount_lessons
+
+
+def get_lessons(lessons):
     lessons_list = []
     for lesson in lessons:
         if lesson.get('group') == 1:
@@ -153,8 +161,9 @@ def get_lessons_list(lessons):
             lessons_list.append(name_lesson)
         else:
             lessons_list.append(lesson.get('name'))
+    amount_lessons = count_same_lessons(lessons_list)
 
-    return lessons_list
+    return amount_lessons
 
 
 def get_day_from_phrase(phrase):
@@ -172,7 +181,13 @@ def post_idleness():
 
 
 def concatenate_with_and(lessons):
-    return ', '.join(lessons[:-1]) + ' и ' + lessons[-1]
+    lessons_lst = []
+    for lesson in lessons:
+        if lessons.get(lesson) == 2:
+            lessons_lst.append('две пары по предмету: ' + lesson)
+        else:
+            lessons_lst.append(lesson)
+    return ', '.join(lessons_lst[:-1]) + ' и ' + lessons_lst[-1]
 
 
 def post_thank_response():
@@ -182,7 +197,7 @@ def post_thank_response():
 def make_today_lessons_phrase():
     lessons = timetable.get_lessons_for_day(date.today())
     if lessons:
-        name_lessons = get_lessons_list(lessons)
+        name_lessons = get_lessons(lessons)
         return 'Сегодня у вас: ' + concatenate_with_and(name_lessons)
     else:
         return 'Сегодня нет пар' + post_idleness()
@@ -192,7 +207,7 @@ def make_tomorrow_lessons_phrase():
     tomorrow_date = date.today() + datetime.timedelta(days=1)
     lessons = timetable.get_lessons_for_day(tomorrow_date)
     if lessons:
-            name_lessons = get_lessons_list(lessons)
+            name_lessons = get_lessons(lessons)
             return 'Завтра у вас будет: ' + concatenate_with_and(name_lessons)
     else:
         return 'Завтра нет пар' + post_idleness()
@@ -202,7 +217,7 @@ def make_yesterday_lessons_phrase():
     yesterday_date = date.today() - datetime.timedelta(days=1)
     lessons = timetable.get_lessons_for_day(yesterday_date)
     if lessons:
-        name_lessons = get_lessons_list(lessons)
+        name_lessons = get_lessons(lessons)
         return 'Вчера у вас было: ' + concatenate_with_and(name_lessons)
     else:
         return 'Вчера пар не было.'
@@ -212,7 +227,7 @@ def make_particular_day_lessons_phrase(command):
     day = get_day_from_phrase(command)
     lessons = timetable.get_lessons_for_day(day)
     if lessons:
-        name_lessons = get_lessons_list(lessons)
+        name_lessons = get_lessons(lessons)
         return '{} у вас: '.format(DAYS_RESPONSE.get(day)) + concatenate_with_and(name_lessons)
     else:
         return '{} пар нет'.format(DAYS_RESPONSE.get(day)) + post_idleness()

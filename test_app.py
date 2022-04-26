@@ -1,11 +1,11 @@
-import app
-import sayings
-import timetable
-
 from datetime import date
 
 import time_machine
 
+import app
+import sayings
+import timetable
+import admin_commands
 
 def test_not_get_lessons():
     assert timetable.get_lessons_for_day(date(2022, 2, 22)) is None, "Should be None"
@@ -89,3 +89,18 @@ def test_tomorrow():
         assert app.make_tomorrow_lessons_phrase() == \
                'Завтра у вас будет: две пары по предмету: Управление ИТ-сервисами и контентом и ' \
                'Оценка и управление финансовыми рисками'
+
+
+def test_make_lessons_order_list():
+    assert admin_commands.make_lessons_order_list("первая пара математика, второй предмет бухучет, четвертая информатика") == \
+           [('первая', 'математика'), ('второй', 'бухучет'), ('четвертая', 'информатика')]
+
+
+def test_lessons_time():
+    assert admin_commands.lessons_time([('первая', 'математика'), ('второй', 'бухучет'), ('четвертая', 'информатика')]) ==\
+           {'математика': '8:00', 'бухучет': '9:45', 'информатика': '13:25'}
+
+
+def test_lessons_time1():
+    assert admin_commands.lessons_time([('первая', 'математика'), ('второй', 'бухучет'), ('третья', 'информатика'), ('шестой', 'АБД')]) ==\
+           {'математика': '8:00', 'бухучет': '9:45', 'информатика': '11:30', 'АБД': '16:55'}

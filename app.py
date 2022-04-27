@@ -7,6 +7,7 @@ import collections
 
 import sayings
 import timetable
+import admin_commands
 
 TIMETABLE_FLAGS = {
     'расписание',
@@ -79,6 +80,15 @@ HELP = """
 Чтобы узнать как пользоваться навыком, скажите "Алиса, дай справку".
 """
 
+ADD_COMMAND = {
+    'добавить',
+    'записать',
+    'добавь',
+    'запиши',
+
+}
+
+
 app = Flask(__name__)
 
 
@@ -105,6 +115,8 @@ def create_response(payload):
             phrase = make_tomorrow_lessons_phrase()
         elif is_query_for_particular_day(command):
             phrase = make_particular_day_lessons_phrase(command)
+        elif is_command_add(command):
+            phrase = add_new_timetable(command)
         else:
             phrase = make_today_lessons_phrase()
     else:
@@ -142,6 +154,11 @@ def is_command_thank(phrase):
 
 def is_command_help(phrase):
     return phrase.lower() in ASK_HELP
+
+
+def is_command_add(phrase):
+    lexems = phrase.lower().split()
+    return bool(ADD_COMMAND.intersection(set(lexems)))
 
 
 def count_same_lessons(lessons):
@@ -240,4 +257,8 @@ def answer_for_thank():
 
 def get_help():
     return ABOUT
+
+
+def add_new_timetable(command):
+    return admin_commands.add(command)
 

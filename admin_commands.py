@@ -11,7 +11,10 @@ TIME = {
     'седьм': '18:40',
 }
 
-phrase1 = "первая пара математика, второй предмет бухучет, четвертая информатика"
+SUCCESS = 'Расписание успешно записано'
+
+INCORRECT_COMMAND = 'Извините, я вас не понимаю! Чтобы узнать как правильно добавить расписание,' \
+                     ' скажите: "Алиса, дай справку: добавить расписание"'
 
 
 def make_lessons_order_list(phrase):
@@ -33,6 +36,17 @@ def lessons_time(lessons_order_list):
     return lessons_time_dict
 
 
+def is_valid(phrase):
+    pass
+
+
+def add(command):
+    if is_valid(command):
+        # функции записи
+        # ...
+        return SUCCESS
+    else:
+        return INCORRECT_COMMAND
 
 
 

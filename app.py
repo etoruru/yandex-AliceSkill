@@ -5,88 +5,13 @@ import datetime
 import random
 import collections
 
+from constants import DAYS, DAYS_RESPONSE
+import constants
 import sayings
 import timetable
 import admin_commands
 
-TIMETABLE_FLAGS = {
-    'расписание',
-    'уроки',
-    'пары',
-}
 
-TOMORROW = 'завтра'
-YESTERDAY = 'вчера'
-
-THANK = 'спасибо'
-
-DAYS = {
-    'понедельник': 'понедельник',
-
-    'вторник': 'вторник',
-
-    'среду': 'среда',
-    'средам': 'среда',
-    'среде': 'среда',
-
-    'четвергу': 'четверг',
-    'четверг': 'четверг',
-
-    'пятницу': 'пятница',
-    'пятнице': 'пятница',
-
-    'субботу': 'суббота',
-    'субботе': 'суббота',
-
-    'воскресенье': 'воскресенье',
-}
-
-DAYS_RESPONSE = {
-    'понедельник': 'В понедельник',
-    'вторник': 'Во вторник',
-    'среда': 'В среду',
-    'четверг': 'В четверг',
-    'пятница': 'В пятницу',
-    'суббота': 'В субботу',
-    'воскресенье': 'В воскресенье',
-}
-
-ASK_HELP = {
-    'что ты умеешь',
-    'дай справку',
-    'покажи справку',
-    'помощь',
-    'справка',
-}
-
-ABOUT = """
-Добро пожаловать! Чтобы узнать расписание на сегодня,
-скажите "Какие сегодня пары", 
-для того, чтобы узнать расписание на завтра,
-скажите "Какие завтра пары", 
-узнать расписание на конкретный день,
-произнесите "Какие пары в" и день недели, 
-например, "Какие пары в понедельник". 
-"""
-
-GREETING = """
-Добро пожаловать! Здесь вы можете узнать свое расписание пар,
-сказав "Какие сегодня пары?" или "Какое расписание на понедельник?" 
-Для получение полного списка моих возможностей, скажите "Алиса, дай справку". 
-"""
-
-HELP = """ 
-Извините, я вас не понимаю.
-Чтобы узнать как пользоваться навыком, скажите "Алиса, дай справку".
-"""
-
-ADD_COMMAND = {
-    'добавить',
-    'записать',
-    'добавь',
-    'запиши',
-
-}
 
 
 app = Flask(__name__)
@@ -105,9 +30,9 @@ def create_response(payload):
     version = payload.get('version')
     session = payload.get('session')
     command = payload.get('request', {}).get('command')
-    phrase = HELP
+    phrase = constants.HELP
     if not command:
-        phrase = GREETING
+        phrase = constants.GREETING
     elif is_query_for_timetable(command):
         if is_query_timetable_yesterday(command):
             phrase = make_yesterday_lessons_phrase()
@@ -131,15 +56,15 @@ def create_response(payload):
 
 def is_query_for_timetable(phrase):
     lexems = phrase.lower().split()
-    return bool(TIMETABLE_FLAGS.intersection(set(lexems)))
+    return bool(constants.TIMETABLE_FLAGS.intersection(set(lexems)))
 
 
 def is_query_timetable_yesterday(phrase):
-    return phrase.lower().find(YESTERDAY) != -1
+    return phrase.lower().find(constants.YESTERDAY) != -1
 
 
 def is_query_timetable_tomorrow(phrase):
-    return phrase.lower().find(TOMORROW) != -1
+    return phrase.lower().find(constants.TOMORROW) != -1
 
 
 def is_query_for_particular_day(phrase):
@@ -149,16 +74,16 @@ def is_query_for_particular_day(phrase):
 
 
 def is_command_thank(phrase):
-    return phrase.lower().find(THANK) != -1
+    return phrase.lower().find(constants.THANK) != -1
 
 
 def is_command_help(phrase):
-    return phrase.lower() in ASK_HELP
+    return phrase.lower().replace('алиса, ', '') in constants.ASK_HELP
 
 
 def is_command_add(phrase):
     lexems = phrase.lower().split()
-    return bool(ADD_COMMAND.intersection(set(lexems)))
+    return bool(constants.ADD_COMMAND.intersection(set(lexems)))
 
 
 def count_same_lessons(lessons):
@@ -256,7 +181,7 @@ def answer_for_thank():
 
 
 def get_help():
-    return ABOUT
+    return constants.ABOUT
 
 
 def add_new_timetable(command):

@@ -6,6 +6,7 @@ import app
 import sayings
 import timetable
 import admin_commands
+import constants
 
 def test_not_get_lessons():
     assert timetable.get_lessons_for_day(date(2022, 2, 22)) is None, "Should be None"
@@ -92,24 +93,33 @@ def test_tomorrow():
 
 
 def test_make_lessons_order_list():
-    assert admin_commands.make_lessons_order_list("первая пара математика, второй предмет бухучет, четвертая информатика") == \
+    assert admin_commands.make_lessons_order_list("первая пара математика, второй предмет бухучет у первой группы по числителю, четвертая информатика") == \
            [('первая', 'математика'), ('второй', 'бухучет'),  ('четвертая', 'информатика') ]
 
 
 def test_lessons_time():
-    assert admin_commands.lessons_time([('первая', 'математика'), ('второй', 'бухучет'), ('четвертая', 'информатика')]) ==\
+    assert admin_commands.lessons_time('первая математика, второй бухучет, четвертая информатика') ==\
            {'математика': '8:00', 'бухучет': '9:45', 'информатика': '13:25'}
 
 
 def test_lessons_time1():
-    assert admin_commands.lessons_time([('первая', 'математика'), ('второй', 'бухучет'), ('третья', 'информатика'), ('шестой', 'АБД')]) ==\
-           {'математика': '8:00', 'бухучет': '9:45', 'информатика': '11:30', 'АБД': '16:55'}
+    assert admin_commands.lessons_time('первая математика, второй бухучет, шестой АБД') ==\
+           {'математика': '8:00', 'бухучет': '9:45', 'АБД': '16:55'}
 
 
 def test_all_lessons_time():
-    assert admin_commands.lessons_time([('первая', 'математика'), ('второй', 'бухучет'), ('третья', 'информатика'), ('шестой', 'АБД'), ('пятая', 'физра'), ('четвертая', 'история'), ('седьмой', 'ИТУ')]) ==\
+    assert admin_commands.lessons_time('первая математика, второй бухучет, третья информатика, шестой АБД, пятая физра, четвертая история, седьмой ИТУ') ==\
            {'математика': '8:00', 'бухучет': '9:45', 'информатика': '11:30', 'АБД': '16:55', 'физра': '15:10', 'история': '13:25', 'ИТУ': '18:40'}
 
 
 def test_is_add_command():
     assert app.is_command_add('Алиса, запиши расписание') == True
+
+
+# def test_create_new_timetable():
+#     assert admin_commands.add('Алиса, запиши расписание на понедельник первая пара информатика по числителю,'
+#                                ' второй предмет бухучет у второй группы, четвертая математика у первой группы') == constants.SUCCESS
+#
+#
+# def test_wrong_command_create():
+#     assert admin_commands.add('Алиса запиши расписание первая пара информатика, затем история у первой группы, затем математика') == constants.INCORRECT_COMMAND

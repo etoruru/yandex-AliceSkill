@@ -96,7 +96,9 @@ def test_tomorrow():
 
 
 # ------------------ TESTS FOR ADDING A NEW TIMETABLE--------------------------
-
+@pytest.fixture()
+def prepare_timetable():
+    shutil.copyfile(timetable.DATA_FILE,'timetable-sample.json')
 
 def test_make_lessons_order_list():
     assert admin_commands.make_lessons_order_list("первая пара математика, второй предмет бухучет у первой группы по числителю, четвертая информатика") == \

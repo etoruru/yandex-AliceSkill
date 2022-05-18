@@ -6,8 +6,18 @@ from constants import SUCCESS, INCORRECT_COMMAND
 import timetable
 
 
+def add_spaces(name, phrase):
+    lesson = ''
+    clean_phrase = re.sub(r'пара|предмет|урок|\sу\s|второй\sгруппы|первой\sгруппы|по|числителю|знаменателю', '', phrase)
+    for word in clean_phrase.replace(',', '').split():
+        if word in name:
+            lesson += word + ' '
+    return lesson.strip(' ')
+
+
 def make_lessons_order_list(phrase):
-    clean_phrase = re.sub(r'\sпара\s|\sпредмет\s|\sурок\s|\sу\s|второй\sгруппы|первой\sгруппы|по|числителю|знаменателю', '', phrase)
+    clean_phrase = re.sub(r'\sпара\s|\sпредмет\s|\sурок\s|\sу\s|второй\sгруппы|первой\sгруппы|по|числителю|знаменателю',
+                          '', phrase)
     phrase_without_spaces = re.sub(r'\s', '', clean_phrase)
     return re.findall(r'(перв[аяоеуюий]{2}|втор[аяоеуюий]{2}|треть[аяоеуюий]|четверт[аяоеуюий]{2}'
                       r'|пят[аяоеуюий]{2}|шест[аяоеуюий]{2}|седьм[аяоеуюий]{2})(\w+)', phrase_without_spaces)
@@ -32,12 +42,16 @@ def make_cut_phrase(phrase, day):
 
 def create_new_timetable(phrase):
     old_timetable = timetable.read()
-    day = get_day(phrase)
-    cut_phrase = make_cut_phrase(phrase, day)
+    day_from_phrase = get_day(phrase)
+    day_eng = timetable.DAYS.get(day_from_phrase)
+    cut_phrase = make_cut_phrase(phrase, day_from_phrase)
     lessons_lst = make_lessons_list(cut_phrase)
     lessons_divided_weeks = divide_week_type(lessons_lst, cut_phrase)
-    for week, lessons in lessons_divided_weeks.items():
-        old_timetable[timetable.DAYS.get(day)][week].extend(lessons)
+    if old_timetable.get(day_eng):
+        for week, lessons in lessons_divided_weeks.items():
+            old_timetable[day_eng][week].extend(lessons)
+    else:
+        old_timetable[day_eng] = lessons_divided_weeks
     return old_timetable
 
 
@@ -45,7 +59,8 @@ def what_week_type(name, phrase):
     lesson_week_type = get_week_type(phrase)
     if lesson_week_type:
         for lesson, week in lesson_week_type:
-            if name == lesson:
+            correct_lesson = add_spaces(lesson, phrase)
+            if name == correct_lesson:
                 return WEEK_TYPES.get(week)
     else:
         return 'persistent'
@@ -70,7 +85,8 @@ def make_lessons_list(phrase):
     lessons_time_dict = lessons_time(phrase)
     group_list = make_list_name_group(phrase)
     for name, time in lessons_time_dict.items():
-        lesson = make_dict(name, time)
+        correct_name = add_spaces(name, phrase)
+        lesson = make_dict(correct_name, time)
         if group_list:
             for name_g, group_num in group_list:
                 if name_g == name:
@@ -94,9 +110,6 @@ def lessons_time(phrase):
     for num, name in make_lessons_order_list(phrase):
         lessons_time_dict[name] = define_time(num)
     return lessons_time_dict
-
-phrase = 'Алиса, запиши расписание на понедельник первая пара информатика по числителю, второй предмет бухучет у второй группы, четвертая математика у первой группы'
-#phrase = 'Алиса запиши расписание первая пара информатика, затем история'
 
 
 def get_day(phrase):

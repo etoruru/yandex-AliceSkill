@@ -1,5 +1,7 @@
 from datetime import date
+import shutil
 
+import pytest
 import time_machine
 
 import app
@@ -7,6 +9,7 @@ import sayings
 import timetable
 import admin_commands
 import constants
+
 
 def test_not_get_lessons():
     assert timetable.get_lessons_for_day(date(2022, 2, 22)) is None, "Should be None"
@@ -48,15 +51,15 @@ def test_make_phrase_have_lessons_tomorrow():
 
 def test_is_query_for_tomorrow():
     with time_machine.travel(date(2022, 3, 14)):
-        assert app.is_query_timetable_tomorrow('какие завтра пары') == True
+        assert app.is_query_timetable_tomorrow('какие завтра пары') is True
 
 
 def test_is_query_for_timetable():
-    assert app.is_query_for_timetable('какие уроки сегодня') == True
+    assert app.is_query_for_timetable('какие уроки сегодня') is True
 
 
 def test_is_query_not_for_timetable():
-    assert app.is_query_for_timetable('спасибо') == False
+    assert app.is_query_for_timetable('спасибо') is False
 
 
 def test_make_monday_day_lessons_phrase():
@@ -92,14 +95,17 @@ def test_tomorrow():
                'Оценка и управление финансовыми рисками'
 
 
+# ------------------ TESTS FOR ADDING A NEW TIMETABLE--------------------------
+
+
 def test_make_lessons_order_list():
     assert admin_commands.make_lessons_order_list("первая пара математика, второй предмет бухучет у первой группы по числителю, четвертая информатика") == \
            [('первая', 'математика'), ('второй', 'бухучет'),  ('четвертая', 'информатика') ]
 
 
 def test_lessons_time():
-    assert admin_commands.lessons_time('первая математика, второй бухучет, четвертая информатика') ==\
-           {'математика': '8:00', 'бухучет': '9:45', 'информатика': '13:25'}
+    assert admin_commands.lessons_time('первая математика, второй бухучет, четвертая пара методы исследования операций') ==\
+           {'математика': '8:00', 'бухучет': '9:45', 'методыисследованияопераций': '13:25'}
 
 
 def test_lessons_time1():
@@ -113,13 +119,33 @@ def test_all_lessons_time():
 
 
 def test_is_add_command():
-    assert app.is_command_add('Алиса, запиши расписание') == True
+    assert app.is_command_add('Алиса, запиши расписание') is True
+
+
+def test_valid_phrase1():
+    assert admin_commands.is_valid('Алиса запиши расписание на понедельник, информатика, математика, история') is False
+
+
+def test_valid_phrase2():
+    assert admin_commands.is_valid('Алиса добавь расписание, первая пара философия, вторая методы исследования операций') is False
+
 
 
 # def test_create_new_timetable():
 #     assert admin_commands.add('Алиса, запиши расписание на понедельник первая пара информатика по числителю,'
 #                                ' второй предмет бухучет у второй группы, четвертая математика у первой группы') == constants.SUCCESS
 #
+# def test_create_new_timetable1():
+#     assert admin_commands.add('Алиса, запиши расписание на среду, первая пара БЖД по знаменателю, вторая пара БЖД по числителю, пятая пара игровые модели в электронном бизнесе,'
+#                               'шестая пара игровые модели в электронном бизнесе, седьмая пара игровые модели в электронном бизнесе по числителю') == constants.SUCCESS
 #
-# def test_wrong_command_create():
-#     assert admin_commands.add('Алиса запиши расписание первая пара информатика, затем история у первой группы, затем математика') == constants.INCORRECT_COMMAND
+#
+# def test_create_new_timetable2():
+#     assert admin_commands.add('Алиса добавь расписание на вторник, вторая пара военная кафедра') == constants.SUCCESS
+
+
+def test_wrong_command_create():
+    assert admin_commands.add('Алиса запиши расписание первая пара информатика, затем история у первой группы, затем математика') == constants.INCORRECT_COMMAND
+
+
+

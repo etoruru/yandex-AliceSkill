@@ -1,13 +1,9 @@
 import datetime
 import json
 
-import os
 
+DATA_FILE = "timetable.json"
 
-if os.environ["PYTEST_CURRENT_TEST"]:
-    DATA_FILE = "timetable-sample.json"
-else:
-    DATA_FILE = "timetable.json"
 
 DAYS = {
     'понедельник': 'Monday',

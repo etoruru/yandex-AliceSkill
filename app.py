@@ -12,8 +12,6 @@ import timetable
 import admin_commands
 
 
-
-
 app = Flask(__name__)
 
 
@@ -33,6 +31,8 @@ def create_response(payload):
     phrase = constants.HELP
     if not command:
         phrase = constants.GREETING
+    elif is_command_add(command):
+        phrase = add_new_timetable(command)
     elif is_query_for_timetable(command):
         if is_query_timetable_yesterday(command):
             phrase = make_yesterday_lessons_phrase()
@@ -40,8 +40,6 @@ def create_response(payload):
             phrase = make_tomorrow_lessons_phrase()
         elif is_query_for_particular_day(command):
             phrase = make_particular_day_lessons_phrase(command)
-        elif is_command_add(command):
-            phrase = add_new_timetable(command)
         else:
             phrase = make_today_lessons_phrase()
     else:

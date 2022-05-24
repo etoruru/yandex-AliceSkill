@@ -1,5 +1,7 @@
+import json
 from datetime import date
 import shutil
+import os
 
 import pytest
 import time_machine
@@ -9,6 +11,8 @@ import sayings
 import timetable
 import admin_commands
 import constants
+
+
 
 
 def test_not_get_lessons():
@@ -96,9 +100,13 @@ def test_tomorrow():
 
 
 # ------------------ TESTS FOR ADDING A NEW TIMETABLE--------------------------
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def prepare_timetable():
-    shutil.copyfile(timetable.DATA_FILE,'timetable-sample.json')
+    timetbl = timetable.read()
+    with open('timetable-sample.json', 'w') as f:
+        json.dump(timetbl, f, indent=4, ensure_ascii=False)
+
+
 
 def test_make_lessons_order_list():
     assert admin_commands.make_lessons_order_list("первая пара математика, второй предмет бухучет у первой группы по числителю, четвертая информатика") == \
@@ -106,18 +114,19 @@ def test_make_lessons_order_list():
 
 
 def test_lessons_time():
-    assert admin_commands.lessons_time('первая математика, второй бухучет, четвертая пара методы исследования операций') ==\
-           {'математика': '8:00', 'бухучет': '9:45', 'методыисследованияопераций': '13:25'}
+    assert admin_commands.lessons_time([('первая', 'математика'), ('второй', 'бухучет'), ('четвертая', 'информатика')]) ==\
+           {'8:00': 'математика', '9:45': 'бухучет', '13:25': 'информатика'}
 
 
 def test_lessons_time1():
-    assert admin_commands.lessons_time('первая математика, второй бухучет, шестой АБД') ==\
-           {'математика': '8:00', 'бухучет': '9:45', 'АБД': '16:55'}
+    assert admin_commands.lessons_time([('первая', 'математика'), ('второй', 'бухучет'), ('шестой', 'АБД')]) ==\
+           {'8:00': 'математика', '9:45': 'бухучет', '16:55': 'АБД'}
 
 
 def test_all_lessons_time():
-    assert admin_commands.lessons_time('первая математика, второй бухучет, третья информатика, шестой АБД, пятая физра, четвертая история, седьмой ИТУ') ==\
-           {'математика': '8:00', 'бухучет': '9:45', 'информатика': '11:30', 'АБД': '16:55', 'физра': '15:10', 'история': '13:25', 'ИТУ': '18:40'}
+    assert admin_commands.lessons_time([('первая', 'математика'), ('второй', 'бухучет'), ('третья', 'информатика'),
+                                        ('шестой', 'АБД'), ('пятая', 'физра'), ('четвертая', 'история'), ('седьмой', 'ИТУ')]) ==\
+           {'8:00': 'математика', '9:45': 'бухучет', '11:30': 'информатика', '16:55': 'АБД', '15:10': 'физра', '13:25': 'история', '18:40': 'ИТУ'}
 
 
 def test_is_add_command():
@@ -125,29 +134,41 @@ def test_is_add_command():
 
 
 def test_valid_phrase1():
-    assert admin_commands.is_valid('Алиса запиши расписание на понедельник, информатика, математика, история') is False
+    assert admin_commands.is_valid('Алиса запиши расписание на понедельник,'
+                                   ' информатика, математика, история') is False
 
 
 def test_valid_phrase2():
-    assert admin_commands.is_valid('Алиса добавь расписание, первая пара философия, вторая методы исследования операций') is False
+    assert admin_commands.is_valid('Алиса добавь расписание, первая пара философия,'
+                                   ' вторая методы исследования операций') is False
 
 
+def test_create_new_timetable():
+    if os.environ.get("PYTEST_CURRENT_TEST"):
+        timetable.DATA_FILE = "timetable-sample.json"
+    else:
+        timetable.DATA_FILE = "timetable.json"
+    assert admin_commands.add('Алиса, запиши расписание на понедельник первая пара информатика по числителю,'
+                               ' второй предмет бухучет у второй группы, четвертая математика у первой группы') == constants.SUCCESS
 
-# def test_create_new_timetable():
-#     assert admin_commands.add('Алиса, запиши расписание на понедельник первая пара информатика по числителю,'
-#                                ' второй предмет бухучет у второй группы, четвертая математика у первой группы') == constants.SUCCESS
-#
-# def test_create_new_timetable1():
-#     assert admin_commands.add('Алиса, запиши расписание на среду, первая пара БЖД по знаменателю, вторая пара БЖД по числителю, пятая пара игровые модели в электронном бизнесе,'
-#                               'шестая пара игровые модели в электронном бизнесе, седьмая пара игровые модели в электронном бизнесе по числителю') == constants.SUCCESS
-#
-#
-# def test_create_new_timetable2():
-#     assert admin_commands.add('Алиса добавь расписание на вторник, вторая пара военная кафедра') == constants.SUCCESS
+def test_create_new_timetable1():
+    if os.environ.get("PYTEST_CURRENT_TEST"):
+        timetable.DATA_FILE = "timetable-sample.json"
+    else:
+        timetable.DATA_FILE = "timetable.json"
+    assert admin_commands.add('Алиса, запиши расписание на среду первая пара БЖД по знаменателю, вторая пара БЖД по числителю, пятая пара игровые модели в электронном бизнесе,'
+                              'шестая пара игровые модели в электронном бизнесе, седьмая пара игровые модели в электронном бизнесе по числителю') == constants.SUCCESS
 
 
 def test_wrong_command_create():
     assert admin_commands.add('Алиса запиши расписание первая пара информатика, затем история у первой группы, затем математика') == constants.INCORRECT_COMMAND
 
+
+def test_file():
+    if os.environ.get("PYTEST_CURRENT_TEST"):
+        timetable.DATA_FILE = "timetable-sample.json"
+    else:
+        timetable.DATA_FILE = "timetable.json"
+    assert timetable.DATA_FILE == 'timetable-sample.json'
 
 

@@ -1,6 +1,5 @@
 import json
 from datetime import date
-import shutil
 import os
 
 import pytest
@@ -11,8 +10,6 @@ import sayings
 import timetable
 import admin_commands
 import constants
-
-
 
 
 def test_not_get_lessons():
@@ -150,12 +147,12 @@ def test_create_new_timetable():
         timetable.DATA_FILE = "timetable.json"
     assert admin_commands.add('Алиса, запиши расписание на понедельник первая пара информатика по числителю,'
                                ' второй предмет бухучет у второй группы, четвертая математика у первой группы') == constants.SUCCESS
-
+#
 def test_create_new_timetable1():
-    if os.environ.get("PYTEST_CURRENT_TEST"):
-        timetable.DATA_FILE = "timetable-sample.json"
-    else:
-        timetable.DATA_FILE = "timetable.json"
+    # if os.environ.get("PYTEST_CURRENT_TEST"):
+    #     timetable.DATA_FILE = "timetable-sample.json"
+    # else:
+    #     timetable.DATA_FILE = "timetable.json"
     assert admin_commands.add('Алиса, запиши расписание на среду первая пара БЖД по знаменателю, вторая пара БЖД по числителю, пятая пара игровые модели в электронном бизнесе,'
                               'шестая пара игровые модели в электронном бизнесе, седьмая пара игровые модели в электронном бизнесе по числителю') == constants.SUCCESS
 
@@ -164,11 +161,22 @@ def test_wrong_command_create():
     assert admin_commands.add('Алиса запиши расписание первая пара информатика, затем история у первой группы, затем математика') == constants.INCORRECT_COMMAND
 
 
+
+
 def test_file():
-    if os.environ.get("PYTEST_CURRENT_TEST"):
-        timetable.DATA_FILE = "timetable-sample.json"
-    else:
-        timetable.DATA_FILE = "timetable.json"
     assert timetable.DATA_FILE == 'timetable-sample.json'
 
 
+def test_is_command_add_help():
+    assert app.is_command_adding_help('Алиса, дай справку: добавить расписание') is True
+
+
+def test_is_command_help():
+    assert app.is_command_help('Алиса, дай справку добавить расписание') is True
+
+def test_is_command_help1():
+    assert app.is_command_help('Алиса, что ты умеешь') is True
+
+
+def test_is_add_command1():
+    assert app.is_command_add('Алиса, дай справку добавить расписание') is True

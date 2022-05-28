@@ -31,6 +31,8 @@ def create_response(payload):
     phrase = constants.HELP
     if not command:
         phrase = constants.GREETING
+    elif is_command_adding_help(command):
+        phrase = get_help_adding()
     elif is_command_add(command):
         phrase = add_new_timetable(command)
     elif is_query_for_timetable(command):
@@ -47,7 +49,6 @@ def create_response(payload):
             phrase = answer_for_thank()
         elif is_command_help(command):
             phrase = get_help()
-
     response = {'text': phrase, 'end_session': 'false'}
     return {'version': version, 'session': session, 'response': response}
 
@@ -76,7 +77,14 @@ def is_command_thank(phrase):
 
 
 def is_command_help(phrase):
-    return phrase.lower().replace('алиса, ', '') in constants.ASK_HELP
+    for elem in constants.ASK_HELP:
+        if elem in phrase.lower():
+            return True
+    return False
+
+
+def is_command_adding_help(phrase):
+    return is_command_help(phrase) and is_command_add(phrase)
 
 
 def is_command_add(phrase):
@@ -180,6 +188,10 @@ def answer_for_thank():
 
 def get_help():
     return constants.ABOUT
+
+
+def get_help_adding():
+    return constants.ADDING_ABOUT
 
 
 def add_new_timetable(command):

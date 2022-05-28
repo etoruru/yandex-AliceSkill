@@ -4,7 +4,6 @@ import json
 
 DATA_FILE = "timetable.json"
 
-
 DAYS = {
     'понедельник': 'Monday',
     'вторник': 'Tuesday',

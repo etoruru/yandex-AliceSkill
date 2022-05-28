@@ -101,3 +101,12 @@ def test_main_app_add_timetable(client):
         }
     })
     assert response.json["response"]["text"] == constants.INCORRECT_COMMAND
+
+
+def test_main_add_timetable_help(client):
+    response = client.post('/alice', json={
+        "request": {
+            "command": "'Алиса, дай справку: добавить расписание'"
+        }
+    })
+    assert response.json["response"]["text"] == constants.ADDING_ABOUT

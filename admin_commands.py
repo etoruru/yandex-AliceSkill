@@ -5,7 +5,6 @@ from constants import SUCCESS, INCORRECT_COMMAND
 import timetable
 
 
-
 def make_correct_lessons_name(phrase):
     clean_phrase = re.sub(r'пара|предмет|урок|\sу\s|второй\sгруппы|первой\sгруппы|по|числителю|знаменателю|'
                           r'перв[аяоеуюий]{2}|втор[аяоеуюий]{2}|треть[аяоеуюий]|четверт[аяоеуюий]{2}'

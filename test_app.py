@@ -104,7 +104,6 @@ def prepare_timetable():
         json.dump(timetbl, f, indent=4, ensure_ascii=False)
 
 
-
 def test_make_lessons_order_list():
     assert admin_commands.make_lessons_order_list("первая пара математика, второй предмет бухучет у первой группы по числителю, четвертая информатика") == \
            [('первая', 'математика'), ('второй', 'бухучет'),  ('четвертая', 'информатика') ]
@@ -147,20 +146,15 @@ def test_create_new_timetable():
         timetable.DATA_FILE = "timetable.json"
     assert admin_commands.add('Алиса, запиши расписание на понедельник первая пара информатика по числителю,'
                                ' второй предмет бухучет у второй группы, четвертая математика у первой группы') == constants.SUCCESS
-#
+
+
 def test_create_new_timetable1():
-    # if os.environ.get("PYTEST_CURRENT_TEST"):
-    #     timetable.DATA_FILE = "timetable-sample.json"
-    # else:
-    #     timetable.DATA_FILE = "timetable.json"
     assert admin_commands.add('Алиса, запиши расписание на среду первая пара БЖД по знаменателю, вторая пара БЖД по числителю, пятая пара игровые модели в электронном бизнесе,'
                               'шестая пара игровые модели в электронном бизнесе, седьмая пара игровые модели в электронном бизнесе по числителю') == constants.SUCCESS
 
 
 def test_wrong_command_create():
     assert admin_commands.add('Алиса запиши расписание первая пара информатика, затем история у первой группы, затем математика') == constants.INCORRECT_COMMAND
-
-
 
 
 def test_file():
@@ -173,6 +167,7 @@ def test_is_command_add_help():
 
 def test_is_command_help():
     assert app.is_command_help('Алиса, дай справку добавить расписание') is True
+
 
 def test_is_command_help1():
     assert app.is_command_help('Алиса, что ты умеешь') is True

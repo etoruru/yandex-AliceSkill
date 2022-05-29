@@ -3,8 +3,11 @@ from datetime import date
 
 import time_machine
 
+import constants
 import sayings
-from app import app, ABOUT, HELP
+from constants import ABOUT, HELP
+from app import app
+
 
 
 test_data = {
@@ -88,3 +91,22 @@ def test_main_app_unrecognized(client):
         }
     })
     assert response.json["response"]["text"] == HELP
+
+
+def test_main_app_add_timetable(client):
+    response = client.post('/alice', json={
+        "request": {
+            "command": "'Алиса запиши расписание первая пара информатика,"
+                       " затем история у первой группы, затем математика'"
+        }
+    })
+    assert response.json["response"]["text"] == constants.INCORRECT_COMMAND
+
+
+def test_main_add_timetable_help(client):
+    response = client.post('/alice', json={
+        "request": {
+            "command": "'Алиса, дай справку: добавить расписание'"
+        }
+    })
+    assert response.json["response"]["text"] == constants.ADDING_ABOUT

@@ -4,6 +4,7 @@ from datetime import date
 import datetime
 import random
 import collections
+import re
 
 from constants import DAYS, DAYS_RESPONSE
 import constants
@@ -49,6 +50,8 @@ def create_response(payload):
             phrase = answer_for_thank()
         elif is_command_help(command):
             phrase = get_help()
+        elif is_query_for_week_type(command):
+            phrase = answer_week_type(command)
     response = {'text': phrase, 'end_session': 'false'}
     return {'version': version, 'session': session, 'response': response}
 
@@ -90,6 +93,11 @@ def is_command_adding_help(phrase):
 def is_command_add(phrase):
     lexems = phrase.lower().split()
     return bool(constants.ADD_COMMAND.intersection(set(lexems)))
+
+
+def is_query_for_week_type(phrase):
+    lexems = phrase.lower().split()
+    return bool(constants.ASK_WEEK_TYPE.intersection(set(lexems)))
 
 
 def count_same_lessons(lessons):
@@ -196,4 +204,17 @@ def get_help_adding():
 
 def add_new_timetable(command):
     return admin_commands.add(command)
+
+
+def answer_week_type(command):
+    current_type = constants.WEEK_TYPES.get(timetable.get_week_type(date.today()))
+    if re.fullmatch(r'(алиса, (сегодня|сейчас) (числитель|знаменатель))', command.lower()):
+        if 'числитель' in command.lower() and current_type == 'числитель':
+            return 'Да, сейчас ' + current_type
+        else:
+            if 'знаменатель' in command.lower() and current_type == 'знаменатель':
+                return 'Да, сейчас ' + current_type
+            else:
+                return 'Нет, сейчас ' + current_type
+    return 'Сегодня ' + current_type
 

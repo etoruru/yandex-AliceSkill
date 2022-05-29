@@ -175,3 +175,29 @@ def test_is_command_help1():
 
 def test_is_add_command1():
     assert app.is_command_add('Алиса, дай справку добавить расписание') is True
+
+
+def test_is_query_for_week_type():
+    assert app.is_query_for_week_type('Алиса, какая сегодня неделя') is True
+
+
+def test_is_query_for_week_type1():
+    assert app.is_query_for_week_type('Алиса, сегодня числитель или знаменатель') is True
+
+
+def test_is_query_for_week_type2():
+    assert app.is_query_for_week_type('Алиса, сегодня числитель') is True
+
+
+def test_is_query_for_week_type3():
+    assert app.is_query_for_week_type('Алиса, какая неделя') is True
+
+
+def test_answer_type():
+    with time_machine.travel(date(2022, 3, 15)):
+        assert app.answer_week_type("Алиса, сегодня знаменатель") == 'Нет, сейчас числитель'
+
+
+def test_answer_type1():
+    with time_machine.travel(date(2022, 3, 22)):
+        assert app.answer_week_type("Алиса, сейчас знаменатель") == 'Да, сейчас знаменатель'

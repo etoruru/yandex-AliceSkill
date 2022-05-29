@@ -20,10 +20,9 @@ def add_spaces(lesson, correct_names):
             return name
 
 
-
 def make_lessons_order_list(phrase):
-    clean_phrase = re.sub(r'\sпара\s|\sпредмет\s|\sурок\s|\sу\s|второй\sгруппы|первой\sгруппы|по|числителю|знаменателю',
-                          '', phrase)
+    clean_phrase = re.sub(r'\sпара\s|\sпредмет\s|\sурок\s|\sу\s|второй\sгруппы|'
+                          r'первой\sгруппы|по|числителю|знаменателю','', phrase)
     phrase_without_spaces = re.sub(r'\s', '', clean_phrase)
     return re.findall(r'(перв[аяоеуюий]{2}|втор[аяоеуюий]{2}|треть[аяоеуюий]|четверт[аяоеуюий]{2}'
                       r'|пят[аяоеуюий]{2}|шест[аяоеуюий]{2}|седьм[аяоеуюий]{2})(\w+)', phrase_without_spaces)
@@ -34,7 +33,8 @@ def get_week_type(phrase):
                           r'по','', phrase)
     phrase_without_spaces = re.sub(r'\s', '', clean_phrase)
     return re.findall(r'(перв[аяоеуюий]{2}|втор[аяоеуюий]{2}|треть[аяоеуюий]|четверт[аяоеуюий]{2}'
-                          r'|пят[аяоеуюий]{2}|шест[аяоеуюий]{2}|седьм[аяоеуюий]{2})(\w+)(числителю|знаменателю)', phrase_without_spaces)
+                      r'|пят[аяоеуюий]{2}|шест[аяоеуюий]{2}|седьм[аяоеуюий]{2})'
+                      r'(\w+)(числителю|знаменателю)', phrase_without_spaces)
 
 
 def make_list_name_group(phrase):
@@ -126,14 +126,14 @@ def get_day(phrase):
     phrase_list = phrase.split()
     for word in phrase_list:
         if word in DAYS.keys():
-            return (DAYS.get(word), word)
+            return DAYS.get(word), word
 
 
 def is_valid(phrase):
     clean_phrase = re.sub(r'пара|предмет|урок|\sу\s|второй\sгруппы|первой\sгруппы|\sпо\s|числителю|знаменателю', '', phrase)
     match_day = re.search(r'(понедельник|вторник|среду|четверг|пятницу|субботу|воскресенье)', clean_phrase)
     match_order = re.findall(r'(перв[аяоеуюий]{2}|втор[аяоеуюий]{2}|трет[ьаяоеуюий]{2}|четверт[аяоеуюий]{2}'
-                      r'|пят[аяоеуюий]{2}|шест[аяоеуюий]{2}|седьм[аяоеуюий]{2})', clean_phrase)
+                             r'|пят[аяоеуюий]{2}|шест[аяоеуюий]{2}|седьм[аяоеуюий]{2})', clean_phrase)
     match_block_words = re.findall(r'(затем|потом|далее)', clean_phrase)
     if match_day and match_order and not match_block_words:
         return True
@@ -148,10 +148,3 @@ def add(command):
         return SUCCESS
     else:
         return INCORRECT_COMMAND
-
-
-if __name__ == "__main__":
-    phrase = 'первая пара БЖД по знаменателю, вторая пара БЖД по числителю, пятая пара игровые модели в электронном бизнесе,'\
-            'шестая пара игровые модели в электронном бизнесе, седьмая пара игровые модели в электронном бизнесе по числителю'
-    create_new_timetable('Алиса, запиши расписание на среду первая пара БЖД по знаменателю, вторая пара БЖД по числителю, пятая пара игровые модели в электронном бизнесе,'
-                              'шестая пара игровые модели в электронном бизнесе, седьмая пара игровые модели в электронном бизнесе по числителю')

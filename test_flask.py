@@ -1,10 +1,13 @@
 import pytest
+import json
 from datetime import date
+
 
 import time_machine
 
 import constants
 import sayings
+import timetable
 from constants import ABOUT, HELP
 from app import app
 
@@ -58,12 +61,12 @@ def test_main_app_today(client):
 
 def test_main_app_tomorrow(client):
     with time_machine.travel(date(2022, 3, 14)):
-         response = client.post('/alice', json={
-             "request": {
+        response = client.post('/alice', json={
+            "request": {
                 "command": "какие уроки завтра"
             }
-         })
-         assert response.json["response"]["text"].replace('Завтра нет пар, но помните: ', '') in sayings.HARM_IDLENESS
+        })
+        assert response.json["response"]["text"].replace('Завтра нет пар, но помните: ', '') in sayings.HARM_IDLENESS
 
 
 def test_main_app_thank(client):
@@ -120,3 +123,29 @@ def test_query_week_type(client):
             }
         })
         assert response.json["response"]["text"] == "Сегодня числитель"
+
+
+@pytest.fixture(autouse=True)
+def prepare_timetable():
+    timetbl = timetable.read()
+    with open('timetable-sample.json', 'w') as f:
+        json.dump(timetbl, f, indent=4, ensure_ascii=False)
+
+
+def test_delete_timetable(client):
+    response = client.post('/alice', json={
+        "request": {
+            "command": "Алиса, удали расписание на понедельник"
+        }
+    })
+    assert response.json["response"]["text"] == constants.SUCCESS_DELETE
+
+
+def test_query_tmtbl(client):
+    response = client.post('/alice', json={
+        "request": {
+            "command": "Алиса, какие уроки в понедельник"
+        }
+    })
+    assert response.json["response"]["text"].replace('В понедельник пар нет, но помните: ', '') in sayings.HARM_IDLENESS
+

@@ -110,3 +110,13 @@ def test_main_add_timetable_help(client):
         }
     })
     assert response.json["response"]["text"] == constants.ADDING_ABOUT
+
+
+def test_query_week_type(client):
+    with time_machine.travel(date(2022, 3, 14)):
+        response = client.post('/alice', json={
+            "request": {
+                "command": "'Алиса, какая сейчас неделя'"
+            }
+        })
+        assert response.json["response"]["text"] == "Сегодня числитель"

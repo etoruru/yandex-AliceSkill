@@ -201,3 +201,30 @@ def test_answer_type():
 def test_answer_type1():
     with time_machine.travel(date(2022, 3, 22)):
         assert app.answer_week_type("Алиса, сейчас знаменатель") == 'Да, сейчас знаменатель'
+
+
+def test_is_delete_command():
+    assert app.is_delete_command('Алиса, удали расписание на понедельник') == True
+
+
+# def test_delete():
+#     assert app.delete_timetable('Алиса, удали расписание на понедельник') == constants.SUCCESS_DELETE
+#
+#
+# def test_day():
+#     assert admin_commands.get_day('Алиса, удали расписание на понедельник') == ('понедельник', "понедельник")
+#
+# def test_delete_day():
+#     assert admin_commands.delete_day('Алиса, удали расписание на понедельник') == constants.SUCCESS_DELETE
+#
+#
+# def test_delete_day1():
+#     assert admin_commands.delete_day('Алиса, сбрось расписание на вторник') == constants.FAIL_DELETE
+#
+#
+# def test_delete_all():
+#     assert admin_commands.delete_all() == constants.SUCCESS_DELETE
+
+
+def test_is_query_tm_day():
+    assert app.is_query_for_particular_day('Алиса, скажи расписание на понедельник') == True

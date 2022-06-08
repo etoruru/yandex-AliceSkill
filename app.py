@@ -36,6 +36,8 @@ def create_response(payload):
         phrase = get_help_adding()
     elif is_command_add(command):
         phrase = add_new_timetable(command)
+    elif is_delete_command(command):
+        phrase = delete_timetable(command)
     elif is_query_for_timetable(command):
         if is_query_timetable_yesterday(command):
             phrase = make_yesterday_lessons_phrase()
@@ -98,6 +100,10 @@ def is_command_add(phrase):
 def is_query_for_week_type(phrase):
     lexems = phrase.lower().split()
     return bool(constants.ASK_WEEK_TYPE.intersection(set(lexems)))
+
+
+def is_delete_command(phrase):
+    return bool(re.search(r'сброс[ить]+|удал[ить]+', phrase))
 
 
 def count_same_lessons(lessons):
@@ -217,4 +223,10 @@ def answer_week_type(command):
             else:
                 return 'Нет, сейчас ' + current_type
     return 'Сегодня ' + current_type
+
+
+def delete_timetable(command):
+    return admin_commands.delete(command)
+
+
 

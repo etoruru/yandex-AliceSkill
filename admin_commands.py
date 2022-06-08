@@ -3,6 +3,7 @@ import re
 from constants import TIME, DAYS, GROUPS, WEEK_TYPES
 from constants import SUCCESS, INCORRECT_COMMAND
 import timetable
+import constants
 
 
 def make_correct_lessons_name(phrase):
@@ -126,7 +127,7 @@ def get_day(phrase):
     phrase_list = phrase.split()
     for word in phrase_list:
         if word in DAYS.keys():
-            return DAYS.get(word), word
+            return (DAYS.get(word), word)
 
 
 def is_valid(phrase):
@@ -148,3 +149,32 @@ def add(command):
         return SUCCESS
     else:
         return INCORRECT_COMMAND
+
+
+def is_command_delete_day(command):
+    return bool(re.search(r'понедельник|вторнк|среду|четверг|пятницу|субботу|воскресенье', command))
+
+
+def delete_all():
+    timetable.save({})
+    return constants.SUCCESS_DELETE
+
+
+def delete_day(command):
+    day, _ = get_day(command)
+    day_eng = timetable.DAYS.get(day)
+    old_timetable = timetable.read()
+    if old_timetable.get(day_eng):
+        del old_timetable[day_eng]
+        timetable.save(old_timetable)
+        return constants.SUCCESS_DELETE
+    else:
+        return constants.FAIL_DELETE
+
+
+def delete(command):
+    if is_command_delete_day(command):
+        return delete_day(command)
+    else:
+        return delete_all()
+
